@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Blackjack Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            color: #f1c40f;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        .card {
+            background-color: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #7f8c8d;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: #f1c40f;
+        }
+        
+        tr:hover {
+            background-color: #2c3e50;
+        }
+        
+        .win-rate {
+            font-weight: bold;
+        }
+        
+        .human {
+            color: #3498db;
+        }
+        
+        .llm {
+            color: #e74c3c;
+        }
+        
+        .timestamp {
+            font-size: 0.8em;
+            color: #95a5a6;
+        }
+        
+        .winner-player {
+            color: #2ecc71;
+        }
+        
+        .winner-dealer {
+            color: #e74c3c;
+        }
+        
+        .winner-tie {
+            color: #f39c12;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .refresh-button {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .button-container {
+            text-align: center;
+        }
+        
+        .player-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .player-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+        
+        .matches-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .model-link {
+            color: #e74c3c;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .model-link:hover {
+            color: #f39c12;
+            text-decoration: underline;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #95a5a6;
+            padding: 20px 0;
+            border-top: 1px solid #7f8c8d;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLM Blackjack Leaderboard</h1>
+    
+    <div class="button-container">
+        <a href="/" class="back-button">Back to Game</a>
+        <a href="#" class="refresh-button" id="refresh-btn">Refresh Data</a>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Leaderboard</h2>
+            <table id="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Games</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Ties</th>
+                        <th>Win Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Leaderboard data will be inserted here -->
+                    <tr>
+                        <td colspan="7">Loading leaderboard data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>Recent Matches</h2>
+            <div class="matches-container">
+                <table id="matches-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Player</th>
+                            <th>Result</th>
+                            <th>Response Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Recent matches data will be inserted here -->
+                        <tr>
+                            <td colspan="4">Loading match history...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2025 CUHKJC AI For the Future E-Platform Team</p>
+        <p>
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Privacy Policy</a>
+        </p>
+    </div>
+    
+    <script>
+        // DOM elements
+        const leaderboardTable = document.getElementById('leaderboard-table');
+        const matchesTable = document.getElementById('matches-table');
+        const refreshBtn = document.getElementById('refresh-btn');
+        
+        // Model logo mapping
+        const modelLogos = {
+            'gemma3:latest': '/resources/logo/gemma.png',
+            'qwen3:latest': '/resources/logo/qwen.png',
+            'deepseek-r1:8b': '/resources/logo/deepseek.png'
+        };
+        
+        // Model URL mapping
+        const modelUrls = {
+            'gemma3:latest': 'https://deepmind.google/models/gemma/gemma-3/',
+            'qwen3:latest': 'https://chat.qwen.ai',
+            'deepseek-r1:8b': 'https://github.com/deepseek-ai/DeepSeek-R1'
+        };
+        
+        // Load leaderboard data on page load
+        document.addEventListener('DOMContentLoaded', loadLeaderboardData);
+        
+        // Add refresh button event listener
+        refreshBtn.addEventListener('click', loadLeaderboardData);
+        
+        // Load leaderboard data from API
+        async function loadLeaderboardData() {
+            try {
+                const response = await fetch('/api/leaderboard');
+                const data = await response.json();
+                
+                updateLeaderboardTable(data.leaderboard);
+                updateMatchesTable(data.recent_matches);
+            } catch (error) {
+                console.error('Error loading leaderboard data:', error);
+            }
+        }
+        
+        // Update the leaderboard table
+        function updateLeaderboardTable(leaderboard) {
+            // Clear existing rows
+            leaderboardTable.querySelector('tbody').innerHTML = '';
+            
+            if (leaderboard.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="7">No games played yet</td>';
+                leaderboardTable.querySelector('tbody').appendChild(row);
+                return;
+            }
+            
+            // Add rows for each player
+            leaderboard.forEach((player, index) => {
+                const row = document.createElement('tr');
+                
+                // Determine player class (human or llm)
+                const playerClass = player.player === 'human' ? 'human' : 'llm';
+                
+                // Format win rate as percentage
+                const winRatePercent = (player.win_rate * 100).toFixed(1) + '%';
+                
+                // Create player cell with logo if applicable
+                let playerCell = '';
+                if (player.player === 'human') {
+                    playerCell = `<span class="${playerClass}">Human</span>`;
+                } else {
+                    const logoUrl = modelLogos[player.player] || '';
+                    const modelUrl = modelUrls[player.player] || '#';
+                    playerCell = `
+                        <div class="player-cell">
+                            ${logoUrl ? `<img src="${logoUrl}" alt="${player.player}" class="player-logo">` : ''}
+                            <a href="${modelUrl}" target="_blank" class="model-link">${player.player}</a>
+                        </div>
+                    `;
+                }
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${playerCell}</td>
+                    <td>${player.total_games}</td>
+                    <td>${player.wins}</td>
+                    <td>${player.losses}</td>
+                    <td>${player.ties}</td>
+                    <td class="win-rate">${winRatePercent}</td>
+                `;
+                
+                leaderboardTable.querySelector('tbody').appendChild(row);
+            });
+        }
+        
+        // Update the matches table
+        function updateMatchesTable(matches) {
+            // Clear existing rows
+            matchesTable.querySelector('tbody').innerHTML = '';
+            
+            if (matches.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="4">No matches played yet</td>';
+                matchesTable.querySelector('tbody').appendChild(row);
+                return;
+            }
+            
+            // Add rows for each match
+            matches.forEach(match => {
+                const row = document.createElement('tr');
+                
+                // Format timestamp
+                const date = new Date(match.timestamp);
+                const formattedDate = date.toLocaleString();
+                
+                // Create player cell with logo if applicable
+                let playerCell = '';
+                if (match.player === 'human') {
+                    playerCell = `<span class="human">Human</span>`;
+                } else {
+                    const logoUrl = modelLogos[match.player] || '';
+                    playerCell = `
+                        <div class="player-cell">
+                            ${logoUrl ? `<img src="${logoUrl}" alt="${match.player}" class="player-logo">` : ''}
+                            <span class="llm">${match.player}</span>
+                        </div>
+                    `;
+                }
+                
+                // Determine winner class
+                const winnerClass = `winner-${match.winner}`;
+                
+                // Format winner text
+                let winnerText = '';
+                if (match.winner === 'player') {
+                    winnerText = 'Player Won';
+                } else if (match.winner === 'dealer') {
+                    winnerText = 'Dealer Won';
+                } else {
+                    winnerText = 'Tie';
+                }
+                
+                // Format duration as response time
+                let formattedDuration;
+                if (match.player === 'human') {
+                    formattedDuration = 'N/A';
+                } else {
+                    const durationSec = match.duration.toFixed(2);
+                    formattedDuration = `${durationSec} sec`;
+                }
+                
+                row.innerHTML = `
+                    <td class="timestamp">${formattedDate}</td>
+                    <td>${playerCell}</td>
+                    <td class="${winnerClass}">${winnerText}</td>
+                    <td>${formattedDuration}</td>
+                `;
+                
+                matchesTable.querySelector('tbody').appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

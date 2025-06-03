@@ -1,0 +1,332 @@
+{
+  "matches": [
+    {
+      "timestamp": "2025-06-03T09:46:37.672214",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 1.1470005512237549
+    },
+    {
+      "timestamp": "2025-06-03T09:47:05.980530",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 3.4749457836151123
+    },
+    {
+      "timestamp": "2025-06-03T09:47:09.295183",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 1.188645601272583
+    },
+    {
+      "timestamp": "2025-06-03T09:47:11.720622",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 1.1536481380462646
+    },
+    {
+      "timestamp": "2025-06-03T09:48:34.220433",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 1.6129400730133057
+    },
+    {
+      "timestamp": "2025-06-03T09:48:43.625596",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 0.9172122478485107
+    },
+    {
+      "timestamp": "2025-06-03T09:48:48.426703",
+      "player": "human",
+      "winner": "player",
+      "duration": 2.9161150455474854
+    },
+    {
+      "timestamp": "2025-06-03T09:49:44.148028",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 1.866222620010376
+    },
+    {
+      "timestamp": "2025-06-03T09:49:46.708559",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 0.7425131797790527
+    },
+    {
+      "timestamp": "2025-06-03T09:49:50.061017",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 2.398061990737915
+    },
+    {
+      "timestamp": "2025-06-03T09:49:51.340592",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 0.2910594940185547
+    },
+    {
+      "timestamp": "2025-06-03T09:49:53.229696",
+      "player": "human",
+      "winner": "player",
+      "duration": 0.35826587677001953
+    },
+    {
+      "timestamp": "2025-06-03T09:51:54.913676",
+      "player": "human",
+      "winner": "player",
+      "duration": 2.7380166053771973
+    },
+    {
+      "timestamp": "2025-06-03T09:53:13.007306",
+      "player": "human",
+      "winner": "player",
+      "duration": 6.186145067214966
+    },
+    {
+      "timestamp": "2025-06-03T10:09:09.047114",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 2.3242127895355225
+    },
+    {
+      "timestamp": "2025-06-03T10:09:18.268462",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.28754115104675293
+    },
+    {
+      "timestamp": "2025-06-03T10:09:21.629574",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.3953428268432617
+    },
+    {
+      "timestamp": "2025-06-03T10:09:29.603409",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.0004954338073730469
+    },
+    {
+      "timestamp": "2025-06-03T10:09:31.656382",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.37682294845581055
+    },
+    {
+      "timestamp": "2025-06-03T10:09:32.294524",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.136077880859375
+    },
+    {
+      "timestamp": "2025-06-03T10:09:34.338247",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.17175626754760742
+    },
+    {
+      "timestamp": "2025-06-03T10:09:35.370596",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.14964985847473145
+    },
+    {
+      "timestamp": "2025-06-03T10:24:48.491117",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 2.5177648067474365
+    },
+    {
+      "timestamp": "2025-06-03T10:31:17.723461",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 2.3567092418670654
+    },
+    {
+      "timestamp": "2025-06-03T10:31:39.120460",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.5752437114715576
+    },
+    {
+      "timestamp": "2025-06-03T10:32:00.131747",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.47261714935302734
+    },
+    {
+      "timestamp": "2025-06-03T10:32:10.064661",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.480510950088501
+    },
+    {
+      "timestamp": "2025-06-03T10:32:15.053993",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.4291858673095703
+    },
+    {
+      "timestamp": "2025-06-03T10:33:29.323733",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.3421897888183594
+    },
+    {
+      "timestamp": "2025-06-03T10:35:22.654294",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 30.42955255508423
+    },
+    {
+      "timestamp": "2025-06-03T10:35:30.661358",
+      "player": "human",
+      "winner": "dealer",
+      "duration": 0.7268109321594238
+    },
+    {
+      "timestamp": "2025-06-03T10:35:33.354503",
+      "player": "human",
+      "winner": "player",
+      "duration": 0.7139666080474854
+    },
+    {
+      "timestamp": "2025-06-03T10:50:44.638246",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 2.3066697120666504
+    },
+    {
+      "timestamp": "2025-06-03T10:50:54.201668",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.3926701545715332
+    },
+    {
+      "timestamp": "2025-06-03T10:50:59.396440",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.33734798431396484
+    },
+    {
+      "timestamp": "2025-06-03T10:51:04.157034",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.42124271392822266
+    },
+    {
+      "timestamp": "2025-06-03T10:51:06.903320",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.33934783935546875
+    },
+    {
+      "timestamp": "2025-06-03T10:51:08.046270",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.29781222343444824
+    },
+    {
+      "timestamp": "2025-06-03T10:51:09.021064",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.17726778984069824
+    },
+    {
+      "timestamp": "2025-06-03T10:51:09.931527",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.1402735710144043
+    },
+    {
+      "timestamp": "2025-06-03T10:51:10.568531",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.26407289505004883
+    },
+    {
+      "timestamp": "2025-06-03T10:51:11.306836",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.0005037784576416016
+    },
+    {
+      "timestamp": "2025-06-03T10:51:12.383274",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.15576910972595215
+    },
+    {
+      "timestamp": "2025-06-03T10:51:13.540513",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.18107104301452637
+    },
+    {
+      "timestamp": "2025-06-03T10:51:28.188889",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.325366735458374
+    },
+    {
+      "timestamp": "2025-06-03T10:51:31.736011",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.31509971618652344
+    },
+    {
+      "timestamp": "2025-06-03T10:51:34.015065",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.43176913261413574
+    },
+    {
+      "timestamp": "2025-06-03T10:57:16.117450",
+      "player": "gemma3:latest",
+      "winner": "tie",
+      "duration": 2.277618169784546
+    },
+    {
+      "timestamp": "2025-06-03T10:59:10.369709",
+      "player": "qwen3:latest",
+      "winner": "dealer",
+      "duration": 84.34313464164734
+    },
+    {
+      "timestamp": "2025-06-03T11:12:18.401096",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 2.5347788333892822
+    },
+    {
+      "timestamp": "2025-06-03T11:32:41.097430",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 2.2871057987213135
+    }
+  ],
+  "players": {
+    "human": {
+      "wins": 5,
+      "losses": 12,
+      "ties": 0
+    },
+    "gemma3:latest": {
+      "wins": 8,
+      "losses": 24,
+      "ties": 1
+    },
+    "qwen3:latest": {
+      "wins": 0,
+      "losses": 1,
+      "ties": 0
+    },
+    "deepseek-r1:8b": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0
+    }
+  }
+}
