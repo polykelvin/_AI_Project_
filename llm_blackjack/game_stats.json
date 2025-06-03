@@ -671,6 +671,12 @@
       "player": "qwen3:latest",
       "winner": "player",
       "duration": 78.58929681777954
+    },
+    {
+      "timestamp": "2025-06-03T15:21:21.497820",
+      "player": "qwen3:latest",
+      "winner": "dealer",
+      "duration": 38.65505504608154
     }
   ],
   "players": {
@@ -686,7 +692,7 @@
     },
     "qwen3:latest": {
       "wins": 1,
-      "losses": 6,
+      "losses": 7,
       "ties": 2
     },
     "deepseek-r1:8b": {

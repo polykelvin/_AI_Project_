@@ -744,54 +744,40 @@
                 } else if (msg.role === 'dealer') {
                     // Special styling for thinking messages
                     if (msg.type === 'dealer_thinking') {
-                        messageElement.className = 'message dealer-message';
+                        messageElement.className = 'message dealer-thinking';
                         
-                        // Extract thinking content if present
-                        let thinkingContent = '';
-                        let displayContent = msg.content;
-                        
-                        if (msg.content.includes('<think>') && msg.content.includes('</think>')) {
-                            const thinkMatch = msg.content.match(/<think>([\s\S]*?)<\/think>/);
-                            if (thinkMatch) {
-                                thinkingContent = thinkMatch[1].trim();
-                                displayContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
-                            }
-                        }
+                        // The content should already be just the thinking content
+                        let thinkingContent = msg.content;
                         
                         const header = document.createElement('div');
                         header.className = 'message-header';
-                        header.textContent = `Dealer (${msg.model})`;
+                        header.textContent = `Dealer Thinking (${msg.model})`;
                         
                         messageElement.appendChild(header);
                         
-                        // Add the main response content
-                        const responseText = document.createElement('div');
-                        responseText.textContent = displayContent;
-                        messageElement.appendChild(responseText);
+                        // Create toggle button
+                        const thinkingToggle = document.createElement('button');
+                        thinkingToggle.className = 'thinking-toggle';
+                        thinkingToggle.textContent = 'Show reasoning';
+                        messageElement.appendChild(thinkingToggle);
                         
-                        // Add thinking content in a collapsible panel if present
-                        if (thinkingContent) {
-                            const thinkingToggle = document.createElement('button');
-                            thinkingToggle.className = 'thinking-toggle';
-                            thinkingToggle.textContent = 'Show reasoning';
-                            messageElement.appendChild(thinkingToggle);
-                            
-                            const thinkingPanel = document.createElement('pre');
-                            thinkingPanel.className = 'thinking-content';
-                            thinkingPanel.style.display = 'none';
-                            thinkingPanel.textContent = thinkingContent;
-                            messageElement.appendChild(thinkingPanel);
-                            
-                            thinkingToggle.addEventListener('click', () => {
-                                if (thinkingPanel.style.display === 'none') {
-                                    thinkingPanel.style.display = 'block';
-                                    thinkingToggle.textContent = 'Hide reasoning';
-                                } else {
-                                    thinkingPanel.style.display = 'none';
-                                    thinkingToggle.textContent = 'Show reasoning';
-                                }
-                            });
-                        }
+                        // Create collapsible panel with thinking content
+                        const thinkingPanel = document.createElement('pre');
+                        thinkingPanel.className = 'thinking-content';
+                        thinkingPanel.style.display = 'none'; // Hidden by default
+                        thinkingPanel.textContent = thinkingContent;
+                        messageElement.appendChild(thinkingPanel);
+                        
+                        // Add toggle functionality
+                        thinkingToggle.addEventListener('click', () => {
+                            if (thinkingPanel.style.display === 'none') {
+                                thinkingPanel.style.display = 'block';
+                                thinkingToggle.textContent = 'Hide reasoning';
+                            } else {
+                                thinkingPanel.style.display = 'none';
+                                thinkingToggle.textContent = 'Show reasoning';
+                            }
+                        });
                     } else {
                         messageElement.className = 'message dealer-message';
                         
@@ -828,54 +814,40 @@
                 } else if (msg.role === 'player') {
                     // Special styling for thinking messages
                     if (msg.type === 'player_thinking') {
-                        messageElement.className = 'message player-message';
+                        messageElement.className = 'message player-thinking';
                         
-                        // Extract thinking content if present
-                        let thinkingContent = '';
-                        let displayContent = msg.content;
-                        
-                        if (msg.content.includes('<think>') && msg.content.includes('</think>')) {
-                            const thinkMatch = msg.content.match(/<think>([\s\S]*?)<\/think>/);
-                            if (thinkMatch) {
-                                thinkingContent = thinkMatch[1].trim();
-                                displayContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
-                            }
-                        }
+                        // The content should already be just the thinking content
+                        let thinkingContent = msg.content;
                         
                         const header = document.createElement('div');
                         header.className = 'message-header';
-                        header.textContent = `Player (${msg.model})`;
+                        header.textContent = `Player Thinking (${msg.model})`;
                         
                         messageElement.appendChild(header);
                         
-                        // Add the main response content
-                        const responseText = document.createElement('div');
-                        responseText.textContent = displayContent;
-                        messageElement.appendChild(responseText);
+                        // Create toggle button
+                        const thinkingToggle = document.createElement('button');
+                        thinkingToggle.className = 'thinking-toggle';
+                        thinkingToggle.textContent = 'Show reasoning';
+                        messageElement.appendChild(thinkingToggle);
                         
-                        // Add thinking content in a collapsible panel if present
-                        if (thinkingContent) {
-                            const thinkingToggle = document.createElement('button');
-                            thinkingToggle.className = 'thinking-toggle';
-                            thinkingToggle.textContent = 'Show reasoning';
-                            messageElement.appendChild(thinkingToggle);
-                            
-                            const thinkingPanel = document.createElement('pre');
-                            thinkingPanel.className = 'thinking-content';
-                            thinkingPanel.style.display = 'none';
-                            thinkingPanel.textContent = thinkingContent;
-                            messageElement.appendChild(thinkingPanel);
-                            
-                            thinkingToggle.addEventListener('click', () => {
-                                if (thinkingPanel.style.display === 'none') {
-                                    thinkingPanel.style.display = 'block';
-                                    thinkingToggle.textContent = 'Hide reasoning';
-                                } else {
-                                    thinkingPanel.style.display = 'none';
-                                    thinkingToggle.textContent = 'Show reasoning';
-                                }
-                            });
-                        }
+                        // Create collapsible panel with thinking content
+                        const thinkingPanel = document.createElement('pre');
+                        thinkingPanel.className = 'thinking-content';
+                        thinkingPanel.style.display = 'none'; // Hidden by default
+                        thinkingPanel.textContent = thinkingContent;
+                        messageElement.appendChild(thinkingPanel);
+                        
+                        // Add toggle functionality
+                        thinkingToggle.addEventListener('click', () => {
+                            if (thinkingPanel.style.display === 'none') {
+                                thinkingPanel.style.display = 'block';
+                                thinkingToggle.textContent = 'Hide reasoning';
+                            } else {
+                                thinkingPanel.style.display = 'none';
+                                thinkingToggle.textContent = 'Show reasoning';
+                            }
+                        });
                     } else {
                         messageElement.className = 'message player-message';
                         
