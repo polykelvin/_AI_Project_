@@ -36,7 +36,9 @@ class GameStats:
                 "human": {"wins": 0, "losses": 0, "ties": 0},
                 "gemma3:latest": {"wins": 0, "losses": 0, "ties": 0},
                 "qwen3:latest": {"wins": 0, "losses": 0, "ties": 0},
-                "deepseek-r1:8b": {"wins": 0, "losses": 0, "ties": 0}
+                "deepseek-r1:8b": {"wins": 0, "losses": 0, "ties": 0},
+                "monte_carlo": {"wins": 0, "losses": 0, "ties": 0},
+                "deep_q": {"wins": 0, "losses": 0, "ties": 0}
             }
         }
     
@@ -54,13 +56,20 @@ class GameStats:
         Record a match result
         
         Args:
-            player_type: 'human' or 'llm'
+            player_type: 'human', 'llm', 'monte_carlo', or 'deep_q'
             player_model: Model name if player_type is 'llm', otherwise None
             winner: 'player', 'dealer', or 'tie'
             duration: Match duration in seconds
         """
         # Create player identifier
-        player = player_model if player_type == 'llm' else 'human'
+        if player_type == 'llm':
+            player = player_model
+        elif player_type == 'monte_carlo':
+            player = 'monte_carlo'
+        elif player_type == 'deep_q':
+            player = 'deep_q'
+        else:
+            player = 'human'
         
         print(f"Recording match with player={player}, winner={winner}, duration={duration}")
         

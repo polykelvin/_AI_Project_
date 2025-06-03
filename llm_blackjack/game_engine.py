@@ -126,11 +126,16 @@ class BlackjackGame:
         
         self.player_hand.add_card(self.deck.deal())
         
+        # Check if player busts
         if self.player_hand.is_busted():
             self.game_over = True
             self.winner = "dealer"
             self.message = "Player busts! Dealer wins!"
             self.dealer_hand.cards[0].hidden = False  # Reveal dealer's hidden card
+        
+        # Automatically stand if player hits to exactly 21
+        elif self.player_hand.get_value() == 21:
+            self.player_stand()  # This will handle the dealer's turn and determine the winner
     
     def player_stand(self):
         if self.game_over:
@@ -220,9 +225,16 @@ Remember:
     
     def process_dealer_llm_response(self, response: str) -> str:
         """Process the LLM's response when acting as dealer and take the appropriate action."""
+        # First, remove any thinking section if present
+        if "</think>" in response:
+            # Extract only the part after the thinking section
+            response = response.split("</think>", 1)[1].strip()
+        
+        # Clean and normalize the response
         response = response.strip().upper()
         
-        if "HIT" in response:
+        # Check for exact matches first (most reliable)
+        if response == "HIT":
             # Dealer takes another card
             self.dealer_hand.add_card(self.deck.deal())
             
@@ -233,42 +245,109 @@ Remember:
                 return "Dealer hits and busts! Player wins!"
             
             return f"Dealer hits and now has a visible hand value of {self.dealer_hand.get_value()}"
+        elif response == "STAND":
+            # Process stand action
+            return self._process_dealer_stand()
+        
+        # If no exact match, check the last occurrence of HIT or STAND
+        words = response.split()
+        if words:
+            last_word = words[-1]
+            if "HIT" in last_word:
+                # Dealer takes another card
+                self.dealer_hand.add_card(self.deck.deal())
+                
+                if self.dealer_hand.is_busted():
+                    self.game_over = True
+                    self.winner = "player"
+                    self.message = "Dealer busts! Player wins!"
+                    return "Dealer hits and busts! Player wins!"
+                
+                return f"Dealer hits and now has a visible hand value of {self.dealer_hand.get_value()}"
+            elif "STAND" in last_word:
+                # Process stand action
+                return self._process_dealer_stand()
+        
+        # As a fallback, check if either word appears in the response
+        # Prioritize STAND over HIT if both appear (safer option)
+        if "STAND" in response:
+            return self._process_dealer_stand()
+        elif "HIT" in response:
+            # Dealer takes another card
+            self.dealer_hand.add_card(self.deck.deal())
             
-        elif "STAND" in response:
-            # Determine winner
-            dealer_value = self.dealer_hand.get_value()
-            player_value = self.player_hand.get_value()
-            
-            if dealer_value < 17:
-                return "As the dealer, you must hit until your hand value is at least 17."
-            
-            if dealer_value > player_value:
-                self.winner = "dealer"
-                self.message = "Dealer wins!"
-                result = "Dealer wins!"
-            elif player_value > dealer_value:
+            if self.dealer_hand.is_busted():
+                self.game_over = True
                 self.winner = "player"
-                self.message = "Player wins!"
-                result = "Player wins!"
-            else:
-                self.winner = "tie"
-                self.message = "It's a tie!"
-                result = "It's a tie!"
+                self.message = "Dealer busts! Player wins!"
+                return "Dealer hits and busts! Player wins!"
             
-            self.game_over = True
-            return result
+            return f"Dealer hits and now has a visible hand value of {self.dealer_hand.get_value()}"
         
         return "Invalid response. Please respond with HIT or STAND."
     
+    def _process_dealer_stand(self):
+        """Helper method to process dealer stand action"""
+        # Determine winner
+        dealer_value = self.dealer_hand.get_value()
+        player_value = self.player_hand.get_value()
+        
+        if dealer_value < 17:
+            return "As the dealer, you must hit until your hand value is at least 17."
+        
+        if dealer_value > player_value:
+            self.winner = "dealer"
+            self.message = "Dealer wins!"
+            result = "Dealer wins!"
+        elif player_value > dealer_value:
+            self.winner = "player"
+            self.message = "Player wins!"
+            result = "Player wins!"
+        else:
+            self.winner = "tie"
+            self.message = "It's a tie!"
+            result = "It's a tie!"
+        
+        self.game_over = True
+        return result
+    
     def process_player_llm_response(self, response: str) -> str:
         """Process the LLM's response when acting as player and take the appropriate action."""
+        # First, remove any thinking section if present
+        if "</think>" in response:
+            # Extract only the part after the thinking section
+            response = response.split("</think>", 1)[1].strip()
+        
+        # Clean and normalize the response
         response = response.strip().upper()
         
-        if "HIT" in response:
+        # Check for exact matches first (most reliable)
+        if response == "HIT":
             self.player_hit()
             return "HIT"
-        elif "STAND" in response:
+        elif response == "STAND":
             self.player_stand()
             return "STAND"
+        
+        # If no exact match, check the last occurrence of HIT or STAND
+        # This handles cases where the model explains its decision
+        words = response.split()
+        if words:
+            last_word = words[-1]
+            if "HIT" in last_word:
+                self.player_hit()
+                return "HIT"
+            elif "STAND" in last_word:
+                self.player_stand()
+                return "STAND"
+        
+        # As a fallback, check if either word appears in the response
+        # Prioritize STAND over HIT if both appear (safer option)
+        if "STAND" in response:
+            self.player_stand()
+            return "STAND"
+        elif "HIT" in response:
+            self.player_hit()
+            return "HIT"
         
         return "Invalid response. Please respond with HIT or STAND."

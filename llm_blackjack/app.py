@@ -4,6 +4,7 @@ import time
 from dotenv import load_dotenv
 from game_engine import BlackjackGame
 from llm_interface import LLMInterface
+from rl_interface import RLInterface
 from game_stats import GameStats
 
 # Load environment variables
@@ -11,13 +12,15 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Initialize game and LLM interface
+# Initialize game and AI interfaces
 game = BlackjackGame()
 llm = LLMInterface(model=os.getenv("LLM_MODEL", "gemma3:latest"))
+monte_carlo = RLInterface(algorithm="monte_carlo")
+deep_q = RLInterface(algorithm="deep_q")
 stats = GameStats()
 
-# Track if LLM is playing as player
-llm_is_player = False
+# Track player type
+player_type = "human"  # Options: "human", "llm", "monte_carlo", "deep_q"
 
 # Store conversation history
 conversation_history = []
@@ -43,12 +46,14 @@ def send_resource(path):
 @app.route('/api/start-game', methods=['POST'])
 def start_game():
     """Start a new game"""
-    global llm_is_player, conversation_history, llm_response_times
+    global player_type, conversation_history, llm_response_times
     data = request.json
-    llm_is_player = data.get('llm_is_player', False)
+    player_type = data.get('player_type', 'human')
     
-    # Reset LLM conversation history
+    # Reset AI conversation/state
     llm.reset_conversation()
+    monte_carlo.reset_conversation()
+    deep_q.reset_conversation()
     
     # Clear conversation history and response times
     conversation_history = []
@@ -73,15 +78,21 @@ def start_game():
     
     # Check for immediate game over (e.g., player blackjack)
     if game_state['game_over']:
-        player_type = 'llm' if llm_is_player else 'human'
-        player_model = llm.model if llm_is_player else None
-        duration = 0  # No LLM thinking time for immediate game over
+        player_model = None
+        if player_type == 'llm':
+            player_model = llm.model
+        elif player_type == 'monte_carlo':
+            player_model = 'monte_carlo'
+        elif player_type == 'deep_q':
+            player_model = 'deep_q'
+            
+        duration = 0  # No AI thinking time for immediate game over
         print(f"Immediate game over. Recording match: player_type={player_type}, model={player_model}, winner={game_state['winner']}")
         stats.record_match(player_type, player_model, game_state['winner'], duration)
     
-    # If LLM is player and it's player's turn, get LLM decision
-    if llm_is_player and not game_state['game_over']:
-        # Let LLM make decisions until it stands or busts
+    # If AI is player and it's player's turn, get AI decision
+    if player_type != 'human' and not game_state['game_over']:
+        # Let AI make decisions until it stands or busts
         while not game_state['game_over']:
             prompt = game.get_player_llm_prompt()
             
@@ -92,39 +103,62 @@ def start_game():
                 "type": "player_prompt"
             })
             
-            llm_response, full_response = llm.get_response(prompt)
+            # Get response from appropriate AI
+            if player_type == 'llm':
+                ai_response, full_response = llm.get_response(prompt)
+                model_name = llm.model
+            elif player_type == 'monte_carlo':
+                ai_response, full_response = monte_carlo.get_response(prompt)
+                model_name = 'Monte Carlo'
+            elif player_type == 'deep_q':
+                ai_response, full_response = deep_q.get_response(prompt)
+                model_name = 'Deep Q-Learning'
             
             # Track response time
             if full_response.get("duration"):
                 llm_response_times.append(full_response.get("duration"))
             
+            # Extract thinking content from <think> tags if present
+            thinking_content = ""
+            clean_response = ai_response
+            
+            if "<think>" in ai_response and "</think>" in ai_response:
+                import re
+                think_match = re.search(r"<think>([\s\S]*?)</think>", ai_response)
+                if think_match:
+                    thinking_content = think_match.group(1).strip()
+                    clean_response = ai_response.replace(think_match.group(0), "").strip()
+            
             # Add thinking process to conversation history if available
-            if full_response.get("thinking"):
+            if thinking_content:
                 conversation_history.append({
                     "role": "player",
-                    "content": full_response.get("thinking"),
+                    "content": thinking_content,
                     "type": "player_thinking",
-                    "model": llm.model
+                    "model": model_name
                 })
+                
+                # Update the response to remove the thinking part
+                ai_response = clean_response
             
             # Add response to conversation history with all response data
             conversation_history.append({
                 "role": "player",
-                "content": llm_response,
+                "content": ai_response,
                 "type": "player_response",
-                "model": llm.model,
+                "model": model_name,
                 "duration": full_response.get("duration", 0),
                 "status": full_response.get("status", "unknown"),
                 "fallback": full_response.get("fallback", False),
                 "error": full_response.get("error", None)
             })
             
-            action = game.process_player_llm_response(llm_response)
+            action = game.process_player_llm_response(ai_response)
             
             # Add action to conversation history
             conversation_history.append({
                 "role": "system",
-                "content": f"Player ({llm.model}) chose to {action}",
+                "content": f"Player ({model_name}) chose to {action}",
                 "type": "player_action"
             })
             
@@ -176,14 +210,28 @@ def start_game():
                 if full_response.get("duration"):
                     llm_response_times.append(full_response.get("duration"))
                 
+                # Extract thinking content from <think> tags if present
+                thinking_content = ""
+                clean_response = llm_response
+                
+                if "<think>" in llm_response and "</think>" in llm_response:
+                    import re
+                    think_match = re.search(r"<think>([\s\S]*?)</think>", llm_response)
+                    if think_match:
+                        thinking_content = think_match.group(1).strip()
+                        clean_response = llm_response.replace(think_match.group(0), "").strip()
+                
                 # Add thinking process to conversation history if available
-                if full_response.get("thinking"):
+                if thinking_content:
                     conversation_history.append({
                         "role": "dealer",
-                        "content": full_response.get("thinking"),
+                        "content": thinking_content,
                         "type": "dealer_thinking",
                         "model": llm.model
                     })
+                    
+                    # Update the response to remove the thinking part
+                    llm_response = clean_response
                 
                 # Add response to conversation history with all response data
                 conversation_history.append({
@@ -236,10 +284,26 @@ def start_game():
                 "type": "game_result"
             })
             
-            # Record the match result with total LLM response time
+            # Record the match result with total response time
             total_response_time = sum(llm_response_times)
-            print(f"Game over after LLM play. Recording match: player_type=llm, model={llm.model}, winner={game_state['winner']}, total_response_time={total_response_time}")
-            stats.record_match('llm', llm.model, game_state['winner'], total_response_time)
+            
+            # Use the correct player type and model
+            player_model = None
+            if player_type == 'llm':
+                player_model = llm.model
+            elif player_type == 'monte_carlo':
+                player_model = 'monte_carlo'
+            elif player_type == 'deep_q':
+                player_model = 'deep_q'
+                
+            print(f"Game over after AI play. Recording match: player_type={player_type}, model={player_model}, winner={game_state['winner']}, total_response_time={total_response_time}")
+            stats.record_match(player_type, player_model, game_state['winner'], total_response_time)
+            
+            # Update RL agents with game result if they were playing
+            if player_type == 'monte_carlo':
+                monte_carlo.update_with_result(game_state['winner'] == 'player')
+            elif player_type == 'deep_q':
+                deep_q.update_with_result(game_state['winner'] == 'player')
     
     # Add conversation history to game state
     game_state['conversation_history'] = conversation_history
@@ -252,7 +316,7 @@ def player_hit():
     global llm_response_times
     
     # If human player hits, add to conversation
-    if not llm_is_player:
+    if player_type == 'human':
         conversation_history.append({
             "role": "system",
             "content": "Human player chose to HIT",
@@ -273,14 +337,25 @@ def player_hit():
     
     # If game is over, record the result
     if game_state['game_over']:
-        player_type = 'llm' if llm_is_player else 'human'
-        player_model = llm.model if llm_is_player else None
+        player_model = None
+        if player_type == 'llm':
+            player_model = llm.model
+        elif player_type == 'monte_carlo':
+            player_model = 'monte_carlo'
+        elif player_type == 'deep_q':
+            player_model = 'deep_q'
         
         # For human players, use a nominal duration
         duration = 0 if player_type == 'human' else sum(llm_response_times)
         
         print(f"Game over after hit. Recording match: player_type={player_type}, model={player_model}, winner={game_state['winner']}")
         stats.record_match(player_type, player_model, game_state['winner'], duration)
+        
+        # Update RL agents with game result if they were playing
+        if player_type == 'monte_carlo':
+            monte_carlo.update_with_result(game_state['winner'] == 'player')
+        elif player_type == 'deep_q':
+            deep_q.update_with_result(game_state['winner'] == 'player')
     
     # Add conversation history to game state
     game_state['conversation_history'] = conversation_history
@@ -293,7 +368,7 @@ def player_stand():
     global llm_response_times
     
     # If human player stands, add to conversation
-    if not llm_is_player:
+    if player_type == 'human':
         conversation_history.append({
             "role": "system",
             "content": "Human player chose to STAND",
@@ -331,14 +406,28 @@ def player_stand():
             if full_response.get("duration"):
                 llm_response_times.append(full_response.get("duration"))
             
+            # Extract thinking content from <think> tags if present
+            thinking_content = ""
+            clean_response = llm_response
+            
+            if "<think>" in llm_response and "</think>" in llm_response:
+                import re
+                think_match = re.search(r"<think>([\s\S]*?)</think>", llm_response)
+                if think_match:
+                    thinking_content = think_match.group(1).strip()
+                    clean_response = llm_response.replace(think_match.group(0), "").strip()
+            
             # Add thinking process to conversation history if available
-            if full_response.get("thinking"):
+            if thinking_content:
                 conversation_history.append({
                     "role": "dealer",
-                    "content": full_response.get("thinking"),
+                    "content": thinking_content,
                     "type": "dealer_thinking",
                     "model": llm.model
                 })
+                
+                # Update the response to remove the thinking part
+                llm_response = clean_response
             
             # Add response to conversation history with all response data
             conversation_history.append({
@@ -389,15 +478,26 @@ def player_stand():
             "type": "game_result"
         })
         
-        # Record the match result with total LLM response time
-        player_type = 'llm' if llm_is_player else 'human'
-        player_model = llm.model if llm_is_player else None
+        # Record the match result with total response time
+        player_model = None
+        if player_type == 'llm':
+            player_model = llm.model
+        elif player_type == 'monte_carlo':
+            player_model = 'monte_carlo'
+        elif player_type == 'deep_q':
+            player_model = 'deep_q'
         
         # For human players, use a nominal duration or sum of dealer response times
         duration = sum(llm_response_times)
         
         print(f"Game over after stand. Recording match: player_type={player_type}, model={player_model}, winner={game_state['winner']}, total_response_time={duration}")
         stats.record_match(player_type, player_model, game_state['winner'], duration)
+        
+        # Update RL agents with game result if they were playing
+        if player_type == 'monte_carlo':
+            monte_carlo.update_with_result(game_state['winner'] == 'player')
+        elif player_type == 'deep_q':
+            deep_q.update_with_result(game_state['winner'] == 'player')
     
     # Add conversation history to game state
     game_state['conversation_history'] = conversation_history
@@ -406,9 +506,13 @@ def player_stand():
 
 @app.route('/api/models', methods=['GET'])
 def get_models():
-    """Get available LLM models"""
-    models = llm.get_available_models()
-    return jsonify({"models": models})
+    """Get available LLM models and RL algorithms"""
+    llm_models = llm.get_available_models()
+    
+    # Add RL algorithms
+    all_models = llm_models + ["monte_carlo", "deep_q"]
+    
+    return jsonify({"models": llm_models, "algorithms": ["monte_carlo", "deep_q"], "all": all_models})
 
 @app.route('/api/set-model', methods=['POST'])
 def set_model():

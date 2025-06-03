@@ -144,6 +144,25 @@
             overflow-x: auto;
             max-height: 300px;
             overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        
+        .thinking-toggle {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.8em;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .thinking-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.3);
         }
         
         .hand {
@@ -332,6 +351,8 @@
                     <select id="player-type">
                         <option value="human">Human</option>
                         <option value="llm">LLM</option>
+                        <option value="monte_carlo">Monte Carlo</option>
+                        <option value="deep_q">Deep Q-Learning</option>
                     </select>
                 </div>
                 <div class="settings-row">
@@ -436,16 +457,17 @@
         
         // Game state
         let gameInProgress = false;
-        let llmIsPlayer = false;
         
         // Event listeners
         startBtn.addEventListener('click', startGame);
         hitBtn.addEventListener('click', playerHit);
         standBtn.addEventListener('click', playerStand);
         llmModel.addEventListener('change', setLLMModel);
+        playerType.addEventListener('change', updatePlayerTypeUI);
         
-        // Load available models
+        // Load available models and initialize UI
         loadModels();
+        updatePlayerTypeUI();
         
         // Load available models from the server
         async function loadModels() {
@@ -453,17 +475,26 @@
                 const response = await fetch('/api/models');
                 const data = await response.json();
                 
-                if (data.models && data.models.length > 0) {
-                    // Clear existing options
-                    llmModel.innerHTML = '';
-                    
-                    // Add available models
-                    data.models.forEach(model => {
-                        const option = document.createElement('option');
-                        option.value = model;
-                        option.textContent = model;
-                        llmModel.appendChild(option);
-                    });
+                // Only load models if we're not using RL algorithms
+                if (playerType.value !== 'monte_carlo' && playerType.value !== 'deep_q') {
+                    if (data.models && data.models.length > 0) {
+                        // Clear existing options
+                        llmModel.innerHTML = '';
+                        
+                        // Add available models
+                        data.models.forEach(model => {
+                            const option = document.createElement('option');
+                            option.value = model;
+                            option.textContent = model;
+                            llmModel.appendChild(option);
+                        });
+                        
+                        // Restore previous selection if available
+                        if (llmModel.dataset.previousSelection) {
+                            llmModel.value = llmModel.dataset.previousSelection;
+                            delete llmModel.dataset.previousSelection;
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error loading models:', error);
@@ -494,14 +525,14 @@
         
         // Start a new game
         async function startGame() {
-            llmIsPlayer = playerType.value === 'llm';
             showLoading('Starting new game...');
             
             // Clear chat messages
             chatMessages.innerHTML = '';
             
-            // Log game start with selected model
-            console.log(`Starting new game. Player: ${llmIsPlayer ? 'LLM' : 'Human'}, Model: ${llmModel.value}`);
+            // Log game start with selected player type
+            const playerTypeValue = playerType.value;
+            console.log(`Starting new game. Player: ${playerTypeValue}, Model: ${llmModel.value}`);
             
             try {
                 const startTime = performance.now();
@@ -510,7 +541,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ llm_is_player: llmIsPlayer })
+                    body: JSON.stringify({ player_type: playerTypeValue })
                 });
                 
                 const gameState = await response.json();
@@ -522,7 +553,7 @@
                 gameInProgress = true;
                 
                 // Only enable buttons if human is playing
-                if (!llmIsPlayer) {
+                if (playerType.value === 'human') {
                     hitBtn.disabled = false;
                     standBtn.disabled = false;
                 }
@@ -667,8 +698,8 @@
                 hitBtn.disabled = true;
                 standBtn.disabled = true;
                 console.log("Game is over. Final state:", gameState);
-            } else if (llmIsPlayer) {
-                // Keep buttons disabled when LLM is playing
+            } else if (playerType.value !== 'human') {
+                // Keep buttons disabled when AI is playing
                 hitBtn.disabled = true;
                 standBtn.disabled = true;
             }
@@ -713,19 +744,54 @@
                 } else if (msg.role === 'dealer') {
                     // Special styling for thinking messages
                     if (msg.type === 'dealer_thinking') {
-                        messageElement.className = 'message dealer-thinking';
+                        messageElement.className = 'message dealer-message';
+                        
+                        // Extract thinking content if present
+                        let thinkingContent = '';
+                        let displayContent = msg.content;
+                        
+                        if (msg.content.includes('<think>') && msg.content.includes('</think>')) {
+                            const thinkMatch = msg.content.match(/<think>([\s\S]*?)<\/think>/);
+                            if (thinkMatch) {
+                                thinkingContent = thinkMatch[1].trim();
+                                displayContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+                            }
+                        }
                         
                         const header = document.createElement('div');
                         header.className = 'message-header';
-                        header.textContent = `Dealer Thinking (${msg.model})`;
+                        header.textContent = `Dealer (${msg.model})`;
                         
                         messageElement.appendChild(header);
                         
-                        // Format thinking content with pre tag to preserve formatting
-                        const thinkingContent = document.createElement('pre');
-                        thinkingContent.className = 'thinking-content';
-                        thinkingContent.textContent = msg.content;
-                        messageElement.appendChild(thinkingContent);
+                        // Add the main response content
+                        const responseText = document.createElement('div');
+                        responseText.textContent = displayContent;
+                        messageElement.appendChild(responseText);
+                        
+                        // Add thinking content in a collapsible panel if present
+                        if (thinkingContent) {
+                            const thinkingToggle = document.createElement('button');
+                            thinkingToggle.className = 'thinking-toggle';
+                            thinkingToggle.textContent = 'Show reasoning';
+                            messageElement.appendChild(thinkingToggle);
+                            
+                            const thinkingPanel = document.createElement('pre');
+                            thinkingPanel.className = 'thinking-content';
+                            thinkingPanel.style.display = 'none';
+                            thinkingPanel.textContent = thinkingContent;
+                            messageElement.appendChild(thinkingPanel);
+                            
+                            thinkingToggle.addEventListener('click', () => {
+                                if (thinkingPanel.style.display === 'none') {
+                                    thinkingPanel.style.display = 'block';
+                                    thinkingToggle.textContent = 'Hide reasoning';
+                                } else {
+                                    thinkingPanel.style.display = 'none';
+                                    thinkingToggle.textContent = 'Show reasoning';
+                                }
+                            });
+                        }
                     } else {
                         messageElement.className = 'message dealer-message';
                         
@@ -762,19 +828,54 @@
                 } else if (msg.role === 'player') {
                     // Special styling for thinking messages
                     if (msg.type === 'player_thinking') {
-                        messageElement.className = 'message player-thinking';
+                        messageElement.className = 'message player-message';
+                        
+                        // Extract thinking content if present
+                        let thinkingContent = '';
+                        let displayContent = msg.content;
+                        
+                        if (msg.content.includes('<think>') && msg.content.includes('</think>')) {
+                            const thinkMatch = msg.content.match(/<think>([\s\S]*?)<\/think>/);
+                            if (thinkMatch) {
+                                thinkingContent = thinkMatch[1].trim();
+                                displayContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+                            }
+                        }
                         
                         const header = document.createElement('div');
                         header.className = 'message-header';
-                        header.textContent = `Player Thinking (${msg.model})`;
+                        header.textContent = `Player (${msg.model})`;
                         
                         messageElement.appendChild(header);
                         
-                        // Format thinking content with pre tag to preserve formatting
-                        const thinkingContent = document.createElement('pre');
-                        thinkingContent.className = 'thinking-content';
-                        thinkingContent.textContent = msg.content;
-                        messageElement.appendChild(thinkingContent);
+                        // Add the main response content
+                        const responseText = document.createElement('div');
+                        responseText.textContent = displayContent;
+                        messageElement.appendChild(responseText);
+                        
+                        // Add thinking content in a collapsible panel if present
+                        if (thinkingContent) {
+                            const thinkingToggle = document.createElement('button');
+                            thinkingToggle.className = 'thinking-toggle';
+                            thinkingToggle.textContent = 'Show reasoning';
+                            messageElement.appendChild(thinkingToggle);
+                            
+                            const thinkingPanel = document.createElement('pre');
+                            thinkingPanel.className = 'thinking-content';
+                            thinkingPanel.style.display = 'none';
+                            thinkingPanel.textContent = thinkingContent;
+                            messageElement.appendChild(thinkingPanel);
+                            
+                            thinkingToggle.addEventListener('click', () => {
+                                if (thinkingPanel.style.display === 'none') {
+                                    thinkingPanel.style.display = 'block';
+                                    thinkingToggle.textContent = 'Hide reasoning';
+                                } else {
+                                    thinkingPanel.style.display = 'none';
+                                    thinkingToggle.textContent = 'Show reasoning';
+                                }
+                            });
+                        }
                     } else {
                         messageElement.className = 'message player-message';
                         
@@ -827,6 +928,46 @@
         function hideLoading() {
             spinner.style.display = 'none';
             loadingText.textContent = '';
+        }
+        
+        // Update UI based on player type selection
+        function updatePlayerTypeUI() {
+            const selectedPlayerType = playerType.value;
+            
+            // Handle LLM model dropdown visibility
+            if (selectedPlayerType === 'monte_carlo' || selectedPlayerType === 'deep_q') {
+                // Disable LLM model selection for RL algorithms
+                llmModel.disabled = true;
+                llmModel.style.opacity = '0.5';
+                
+                // Add a placeholder option
+                if (!llmModel.querySelector('option[value="none"]')) {
+                    const placeholderOption = document.createElement('option');
+                    placeholderOption.value = 'none';
+                    placeholderOption.textContent = '--- Not Applicable ---';
+                    placeholderOption.selected = true;
+                    
+                    // Store current selection
+                    const currentSelection = llmModel.value;
+                    
+                    // Clear and add placeholder
+                    llmModel.innerHTML = '';
+                    llmModel.appendChild(placeholderOption);
+                    
+                    // Store the previous selection in a data attribute
+                    llmModel.dataset.previousSelection = currentSelection;
+                }
+            } else {
+                // Re-enable LLM model selection for human or LLM players
+                llmModel.disabled = false;
+                llmModel.style.opacity = '1';
+                
+                // Restore previous options if needed
+                if (llmModel.querySelector('option[value="none"]')) {
+                    // Reload models from server
+                    loadModels();
+                }
+            }
         }
     </script>
 </body>

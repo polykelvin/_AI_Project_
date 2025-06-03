@@ -125,6 +125,11 @@
             border-radius: 4px;
         }
         
+        .rl-algorithm {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
         .matches-container {
             max-height: 400px;
             overflow-y: auto;
@@ -241,7 +246,9 @@
         const modelUrls = {
             'gemma3:latest': 'https://deepmind.google/models/gemma/gemma-3/',
             'qwen3:latest': 'https://chat.qwen.ai',
-            'deepseek-r1:8b': 'https://github.com/deepseek-ai/DeepSeek-R1'
+            'deepseek-r1:8b': 'https://github.com/deepseek-ai/DeepSeek-R1',
+            'monte_carlo': 'https://en.wikipedia.org/wiki/Monte_Carlo_method',
+            'deep_q': 'https://en.wikipedia.org/wiki/Q-learning'
         };
         
         // Load leaderboard data on page load
@@ -290,14 +297,37 @@
                 if (player.player === 'human') {
                     playerCell = `<span class="${playerClass}">Human</span>`;
                 } else {
-                    const logoUrl = modelLogos[player.player] || '';
+                    // Handle different player types
+                    let displayName = player.player;
                     const modelUrl = modelUrls[player.player] || '#';
-                    playerCell = `
-                        <div class="player-cell">
-                            ${logoUrl ? `<img src="${logoUrl}" alt="${player.player}" class="player-logo">` : ''}
-                            <a href="${modelUrl}" target="_blank" class="model-link">${player.player}</a>
-                        </div>
-                    `;
+                    
+                    // Special handling for RL algorithms
+                    if (player.player === 'monte_carlo') {
+                        displayName = 'Monte Carlo';
+                        playerCell = `
+                            <div class="player-cell">
+                                <span class="rl-algorithm">🎲</span>
+                                <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method" target="_blank" class="model-link">${displayName}</a>
+                            </div>
+                        `;
+                    } else if (player.player === 'deep_q') {
+                        displayName = 'Deep Q-Learning';
+                        playerCell = `
+                            <div class="player-cell">
+                                <span class="rl-algorithm">🧠</span>
+                                <a href="https://en.wikipedia.org/wiki/Q-learning" target="_blank" class="model-link">${displayName}</a>
+                            </div>
+                        `;
+                    } else {
+                        // Use existing logo logic for LLM models
+                        const logoUrl = modelLogos[player.player] || '';
+                        playerCell = `
+                            <div class="player-cell">
+                                ${logoUrl ? `<img src="${logoUrl}" alt="${displayName}" class="player-logo">` : ''}
+                                <a href="${modelUrl}" target="_blank" class="model-link">${displayName}</a>
+                            </div>
+                        `;
+                    }
                 }
                 
                 row.innerHTML = `
@@ -338,6 +368,20 @@
                 let playerCell = '';
                 if (match.player === 'human') {
                     playerCell = `<span class="human">Human</span>`;
+                } else if (match.player === 'monte_carlo') {
+                    playerCell = `
+                        <div class="player-cell">
+                            <span class="rl-algorithm">🎲</span>
+                            <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method" target="_blank" class="model-link">Monte Carlo</a>
+                        </div>
+                    `;
+                } else if (match.player === 'deep_q') {
+                    playerCell = `
+                        <div class="player-cell">
+                            <span class="rl-algorithm">🧠</span>
+                            <a href="https://en.wikipedia.org/wiki/Q-learning" target="_blank" class="model-link">Deep Q-Learning</a>
+                        </div>
+                    `;
                 } else {
                     const logoUrl = modelLogos[match.player] || '';
                     playerCell = `

@@ -38,7 +38,7 @@ class LLMInterface:
         """
         start_time = time.time()
         print(f"Requesting response from {self.model} at {start_time}")
-        
+
         # Add the new prompt to conversation history
         self.conversation_history.append({"role": "user", "content": prompt})
         
