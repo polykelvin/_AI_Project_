@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Connect 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #f1c40f;
+        }
+        
+        .main-container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        .game-container {
+            background-color: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-container {
+            background-color: #34495e;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        
+        .chat-header {
+            padding: 10px;
+            background-color: #2c3e50;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 90%;
+            word-break: break-word;
+        }
+        
+        .system-message {
+            background-color: #7f8c8d;
+            align-self: center;
+            font-style: italic;
+            font-size: 0.9em;
+            color: #ecf0f1;
+        }
+        
+        .player1-message {
+            background-color: #e74c3c;
+            align-self: flex-start;
+        }
+        
+        .player2-message {
+            background-color: #3498db;
+            align-self: flex-end;
+        }
+        
+        .game-action {
+            background-color: #8e44ad;
+            align-self: center;
+            font-weight: bold;
+        }
+        
+        .game-state {
+            background-color: #2ecc71;
+            align-self: center;
+            color: #2c3e50;
+        }
+        
+        .game-result {
+            background-color: #f39c12;
+            align-self: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .message-header {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .message-error {
+            font-size: 0.8em;
+            color: #e74c3c;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .player-thinking {
+            background-color: #2980b9;
+            align-self: flex-end;
+            max-width: 95%;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .thinking-content {
+            margin: 0;
+            padding: 5px;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        
+        .thinking-toggle {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.8em;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .thinking-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .board-container {
+            margin: 20px auto;
+            background-color: #3498db;
+            border-radius: 10px;
+            padding: 10px;
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .column {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        
+        .cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 2px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .cell.player1 {
+            background-color: #e74c3c;
+        }
+        
+        .cell.player2 {
+            background-color: #f1c40f;
+        }
+        
+        .column-buttons {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            width: 100%;
+        }
+        
+        .column-button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .column-button:hover {
+            background-color: #1abc9c;
+        }
+        
+        .column-button:disabled {
+            background-color: #7f8c8d;
+            cursor: not-allowed;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button, .leaderboard-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #start-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .leaderboard-btn {
+            background-color: #9b59b6;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .game-message {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .settings {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .settings h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .settings-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .settings-row label {
+            margin-right: 10px;
+        }
+        
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #95a5a6;
+            padding: 20px 0;
+            border-top: 1px solid #7f8c8d;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLM Connect 4</h1>
+    
+    <div class="main-container">
+        <div class="chat-container">
+            <div class="chat-header">LLM Thinking Process</div>
+            <div class="chat-messages" id="chat-messages"></div>
+        </div>
+        
+        <div class="game-container">
+            <div class="settings">
+                <h2>Game Settings</h2>
+                <div class="settings-row">
+                    <label for="player1-type">Player 1 (Red):</label>
+                    <select id="player1-type">
+                        <option value="human">Human</option>
+                        <option value="llm">LLM</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label for="player2-type">Player 2 (Yellow):</label>
+                    <select id="player2-type">
+                        <option value="human">Human</option>
+                        <option value="llm" selected>LLM</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label for="llm-model">LLM Model:</label>
+                    <select id="llm-model">
+                        <option value="gemma3:latest">Gemma 3</option>
+                        <option value="qwen3:latest">Qwen 3</option>
+                        <option value="deepseek-r1:8b">DeepSeek-R1 8B</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="board-container">
+                <div class="board" id="board">
+                    <!-- Board will be generated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="game-message" id="message"></div>
+            
+            <div class="loading">
+                <div class="spinner" id="spinner"></div>
+                <div id="loading-text"></div>
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn">New Game</button>
+                <a href="/leaderboard" class="leaderboard-btn">Leaderboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2025 CUHKJC AI For the Future E-Platform Team</p>
+        <p>
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Privacy Policy</a>
+        </p>
+    </div>
+    
+    <script>
+        // Set a global timeout for fetch requests
+        const FETCH_TIMEOUT = 120000; // 120 seconds (2 minutes)
+
+        // Create a timeout-aware fetch function
+        async function fetchWithTimeout(url, options = {}) {
+            const controller = new AbortController();
+            const { signal } = controller;
+            
+            // Add the abort signal to the fetch options
+            const fetchOptions = { ...options, signal };
+            
+            // Create a timeout that will abort the fetch
+            const timeout = setTimeout(() => {
+                controller.abort();
+                console.warn(`Request to ${url} timed out after ${FETCH_TIMEOUT/1000} seconds`);
+            }, FETCH_TIMEOUT);
+            
+            try {
+                // Attempt the fetch with the timeout
+                const response = await fetch(url, fetchOptions);
+                clearTimeout(timeout);
+                return response;
+            } catch (error) {
+                clearTimeout(timeout);
+                if (error.name === 'AbortError') {
+                    console.error(`Request to ${url} was aborted due to timeout`);
+                    throw new Error(`Request timed out after ${FETCH_TIMEOUT/1000} seconds`);
+                }
+                throw error;
+            }
+        }
+        
+        // DOM elements
+        const board = document.getElementById('board');
+        const message = document.getElementById('message');
+        const chatMessages = document.getElementById('chat-messages');
+        const startBtn = document.getElementById('start-btn');
+        const spinner = document.getElementById('spinner');
+        const loadingText = document.getElementById('loading-text');
+        const player1Type = document.getElementById('player1-type');
+        const player2Type = document.getElementById('player2-type');
+        const llmModel = document.getElementById('llm-model');
+        
+        // Game state
+        let gameInProgress = false;
+        let currentPlayer = 1;
+        let gameBoard = [];
+        
+        // Event listeners
+        startBtn.addEventListener('click', startGame);
+        llmModel.addEventListener('change', setLLMModel);
+        
+        // Initialize the board
+        function initializeBoard() {
+            board.innerHTML = '';
+            
+            // Create 7 columns
+            for (let col = 0; col < 7; col++) {
+                const column = document.createElement('div');
+                column.className = 'column';
+                column.dataset.column = col;
+                
+                // Create 6 cells per column
+                for (let row = 0; row < 6; row++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    
+                    // Add click event to the column
+                    cell.addEventListener('click', () => makeMove(col));
+                    
+                    column.appendChild(cell);
+                }
+                
+                board.appendChild(column);
+            }
+        }
+        
+        // Update the board based on game state
+        function updateBoard(gameState) {
+            gameBoard = gameState.board;
+            
+            // Update each cell
+            for (let col = 0; col < 7; col++) {
+                for (let row = 0; row < 6; row++) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    
+                    if (gameBoard[col][row] === 1) {
+                        cell.className = 'cell player1';
+                    } else if (gameBoard[col][row] === 2) {
+                        cell.className = 'cell player2';
+                    } else {
+                        cell.className = 'cell';
+                    }
+                }
+            }
+            
+            // Update current player and game state
+            currentPlayer = gameState.current_player;
+            gameInProgress = !gameState.game_over;
+            
+            // Update message
+            if (gameState.game_over) {
+                if (gameState.winner === 0) {
+                    message.textContent = "It's a draw!";
+                } else {
+                    message.textContent = `Player ${gameState.winner} wins!`;
+                }
+            } else {
+                message.textContent = `Player ${currentPlayer}'s turn`;
+            }
+            
+            // Update conversation history
+            if (gameState.conversation_history) {
+                updateChatMessages(gameState.conversation_history);
+            }
+        }
+        
+        // Start a new game
+        async function startGame() {
+            showLoading('Starting new game...');
+            
+            // Clear chat messages
+            chatMessages.innerHTML = '';
+            
+            // Log game start with selected player types
+            const player1TypeValue = player1Type.value;
+            const player2TypeValue = player2Type.value;
+            console.log(`Starting new game. Player 1: ${player1TypeValue}, Player 2: ${player2TypeValue}, Model: ${llmModel.value}`);
+            
+            try {
+                const startTime = performance.now();
+                const response = await fetchWithTimeout('/api/start-game', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        player1_type: player1TypeValue,
+                        player2_type: player2TypeValue
+                    })
+                });
+                
+                const gameState = await response.json();
+                const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+                console.log(`Game started in ${duration}s. Response:`, gameState);
+                
+                // Initialize and update the board
+                initializeBoard();
+                updateBoard(gameState);
+                
+                gameInProgress = true;
+            } catch (error) {
+                console.error('Error starting game:', error);
+                message.textContent = 'Error starting game. Please try again.';
+                
+                // Add error message to chat
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message system-message';
+                errorMsg.textContent = `Error: ${error.message}`;
+                chatMessages.appendChild(errorMsg);
+            }
+            
+            hideLoading();
+        }
+        
+        // Make a move
+        async function makeMove(column) {
+            if (!gameInProgress) return;
+            
+            // Check if it's human player's turn
+            const playerType = currentPlayer === 1 ? player1Type.value : player2Type.value;
+            if (playerType !== 'human') return;
+            
+            showLoading('Making move...');
+            console.log(`Player ${currentPlayer} making move in column ${column}`);
+            
+            try {
+                const startTime = performance.now();
+                const response = await fetchWithTimeout('/api/make-move', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ column })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Invalid move');
+                }
+                
+                const gameState = await response.json();
+                const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+                console.log(`Move completed in ${duration}s. Response:`, gameState);
+                
+                updateBoard(gameState);
+            } catch (error) {
+                console.error('Error making move:', error);
+                message.textContent = `Error: ${error.message}`;
+                
+                // Add error message to chat
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message system-message';
+                errorMsg.textContent = `Error: ${error.message}`;
+                chatMessages.appendChild(errorMsg);
+            }
+            
+            hideLoading();
+        }
+        
+        // Set the LLM model
+        async function setLLMModel() {
+            const model = llmModel.value;
+            
+            try {
+                const response = await fetch('/api/set-model', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ model })
+                });
+                
+                const data = await response.json();
+                if (!data.success) {
+                    console.error('Error setting model:', data.error);
+                }
+            } catch (error) {
+                console.error('Error setting model:', error);
+            }
+        }
+        
+        // Update chat messages
+        function updateChatMessages(history) {
+            // Clear existing messages if this is a new conversation
+            if (history.length <= 2) {
+                chatMessages.innerHTML = '';
+            }
+            
+            // Only add new messages
+            const currentMessageCount = chatMessages.children.length;
+            const newMessages = history.slice(currentMessageCount);
+            
+            newMessages.forEach(msg => {
+                const messageElement = document.createElement('div');
+                
+                // Log message to console for debugging
+                console.log('Chat message:', msg);
+                
+                if (msg.role === 'system') {
+                    // Different styling based on message type
+                    if (msg.type === 'game_action' || msg.type === 'player_action') {
+                        messageElement.className = 'message game-action';
+                    } else if (msg.type === 'game_state') {
+                        messageElement.className = 'message game-state';
+                    } else if (msg.type === 'game_result') {
+                        messageElement.className = 'message game-result';
+                    } else {
+                        messageElement.className = 'message system-message';
+                    }
+                    
+                    messageElement.textContent = msg.content;
+                } else if (msg.role === 'player1' || msg.role === 'player2') {
+                    // Special styling for thinking messages
+                    if (msg.type === 'player_thinking') {
+                        messageElement.className = 'message player-thinking';
+                        
+                        // The content should already be just the thinking content
+                        let thinkingContent = msg.content;
+                        
+                        const header = document.createElement('div');
+                        header.className = 'message-header';
+                        header.textContent = `Player ${msg.role === 'player1' ? '1' : '2'} Thinking (${msg.model})`;
+                        
+                        messageElement.appendChild(header);
+                        
+                        // Create toggle button
+                        const thinkingToggle = document.createElement('button');
+                        thinkingToggle.className = 'thinking-toggle';
+                        thinkingToggle.textContent = 'Show reasoning';
+                        messageElement.appendChild(thinkingToggle);
+                        
+                        // Create collapsible panel with thinking content
+                        const thinkingPanel = document.createElement('pre');
+                        thinkingPanel.className = 'thinking-content';
+                        thinkingPanel.style.display = 'none'; // Hidden by default
+                        thinkingPanel.textContent = thinkingContent;
+                        messageElement.appendChild(thinkingPanel);
+                        
+                        // Add toggle functionality
+                        thinkingToggle.addEventListener('click', () => {
+                            if (thinkingPanel.style.display === 'none') {
+                                thinkingPanel.style.display = 'block';
+                                thinkingToggle.textContent = 'Hide reasoning';
+                            } else {
+                                thinkingPanel.style.display = 'none';
+                                thinkingToggle.textContent = 'Show reasoning';
+                            }
+                        });
+                    } else {
+                        messageElement.className = msg.role === 'player1' ? 'message player1-message' : 'message player2-message';
+                        
+                        const header = document.createElement('div');
+                        header.className = 'message-header';
+                        header.textContent = `Player ${msg.role === 'player1' ? '1' : '2'} (${msg.model})`;
+                        
+                        // Add response time if available
+                        if (msg.duration) {
+                            header.textContent += ` - ${msg.duration.toFixed(2)}s`;
+                        }
+                        
+                        // Add status indicator if not success
+                        if (msg.status && msg.status !== 'success') {
+                            header.textContent += ` [${msg.status}]`;
+                        }
+                        
+                        // Add fallback indicator
+                        if (msg.fallback) {
+                            header.textContent += ' [fallback]';
+                        }
+                        
+                        messageElement.appendChild(header);
+                        messageElement.appendChild(document.createTextNode(msg.content));
+                        
+                        // Add error message if present
+                        if (msg.error) {
+                            const errorElement = document.createElement('div');
+                            errorElement.className = 'message-error';
+                            errorElement.textContent = `Error: ${msg.error}`;
+                            messageElement.appendChild(errorElement);
+                        }
+                    }
+                }
+                
+                chatMessages.appendChild(messageElement);
+            });
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show loading spinner
+        function showLoading(text) {
+            spinner.style.display = 'block';
+            loadingText.textContent = text || 'Loading...';
+        }
+        
+        // Hide loading spinner
+        function hideLoading() {
+            spinner.style.display = 'none';
+            loadingText.textContent = '';
+        }
+        
+        // Load available models and initialize UI
+        async function loadModels() {
+            try {
+                const response = await fetch('/api/models');
+                const data = await response.json();
+                
+                if (data.models && data.models.length > 0) {
+                    // Clear existing options
+                    llmModel.innerHTML = '';
+                    
+                    // Add available models
+                    data.models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model;
+                        option.textContent = model;
+                        llmModel.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading models:', error);
+            }
+        }
+        
+        // Initialize the game
+        loadModels();
+        initializeBoard();
+    </script>
+</body>
+</html>

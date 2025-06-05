@@ -1,0 +1,59 @@
+{
+  "matches": [
+    {
+      "timestamp": "2025-06-05T13:10:33.116896",
+      "player1": "human",
+      "player2": "human",
+      "winner": 1,
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-05T13:11:39.764663",
+      "player1": "human",
+      "player2": "llm",
+      "winner": 1,
+      "duration": 9.557926416397095
+    },
+    {
+      "timestamp": "2025-06-05T13:16:05.408866",
+      "player1": "human",
+      "player2": "human",
+      "winner": 0,
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-05T13:23:06.281195",
+      "player1": "human",
+      "player2": "human",
+      "winner": 0,
+      "duration": 0
+    }
+  ],
+  "players": {
+    "human": {
+      "wins": 2,
+      "losses": 1,
+      "ties": 4
+    },
+    "gemma3:latest": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0
+    },
+    "qwen3:latest": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0
+    },
+    "deepseek-r1:8b": {
+      "wins": 0,
+      "losses": 0,
+      "ties": 0
+    },
+    "llm": {
+      "wins": 0,
+      "losses": 1,
+      "ties": 0
+    }
+  }
+}

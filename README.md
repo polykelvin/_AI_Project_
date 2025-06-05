@@ -46,7 +46,8 @@ A web-based Blackjack game where AI plays as the dealer or player, featuring bot
    ollama pull deepseek-r1:8b
    ```
 
-### Cloud LLM Integration (Work in Progress)
+## WIP Feature
+### Cloud LLM Integration
 
 We plan to integrate cloud-based LLM APIs in future updates:
 - OpenAI API (GPT-4, GPT-3.5)
@@ -55,6 +56,11 @@ We plan to integrate cloud-based LLM APIs in future updates:
 - Custom API endpoint support
 
 This will allow comparison between local and cloud-based LLMs for Blackjack strategy.
+
+### User Fine Tune LLM Prompt / Train RL
+
+### Game integration
+Tic-Tac-Toe , Gomoku , Connect Four
 
 ## Application Setup
 

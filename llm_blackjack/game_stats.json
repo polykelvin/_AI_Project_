@@ -707,6 +707,1242 @@
       "player": "qwen3:latest",
       "winner": "player",
       "duration": 17.95882773399353
+    },
+    {
+      "timestamp": "2025-06-03T16:46:48.503863",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 3.968346118927002
+    },
+    {
+      "timestamp": "2025-06-03T16:47:34.862554",
+      "player": "qwen3:latest",
+      "winner": "dealer",
+      "duration": 39.38923645019531
+    },
+    {
+      "timestamp": "2025-06-03T16:50:46.233953",
+      "player": "qwen3:latest",
+      "winner": "player",
+      "duration": 127.72709774971008
+    },
+    {
+      "timestamp": "2025-06-03T16:51:14.619786",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.1677238941192627
+    },
+    {
+      "timestamp": "2025-06-03T16:58:40.477720",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:41.624424",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:42.154247",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:42.983105",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:43.264830",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:43.990254",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:44.264645",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:45.028402",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:45.292915",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:45.696531",
+      "player": "monte_carlo",
+      "winner": "tie",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:46.456441",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:46.742086",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:47.501084",
+      "player": "monte_carlo",
+      "winner": "tie",
+      "duration": 0.0010066032409667969
+    },
+    {
+      "timestamp": "2025-06-03T16:58:47.749689",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:48.241389",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0004968643188476562
+    },
+    {
+      "timestamp": "2025-06-03T16:58:49.096197",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:49.355976",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:50.072849",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:50.338183",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:50.634700",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:51.314400",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:58:51.693961",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.000507354736328125
+    },
+    {
+      "timestamp": "2025-06-03T16:58:52.382115",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:00.256381",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:01.044208",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:01.386151",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:02.128760",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:02.403710",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:03.193250",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:03.455126",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0005040168762207031
+    },
+    {
+      "timestamp": "2025-06-03T16:59:03.932731",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:07.286034",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:13.763586",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.19565033912658691
+    },
+    {
+      "timestamp": "2025-06-03T16:59:14.404107",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0030121803283691406
+    },
+    {
+      "timestamp": "2025-06-03T16:59:14.670642",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.004018545150756836
+    },
+    {
+      "timestamp": "2025-06-03T16:59:15.073760",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:15.929824",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0025339126586914062
+    },
+    {
+      "timestamp": "2025-06-03T16:59:16.440187",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.005544900894165039
+    },
+    {
+      "timestamp": "2025-06-03T16:59:17.643534",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.002530336380004883
+    },
+    {
+      "timestamp": "2025-06-03T16:59:18.190530",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.0015006065368652344
+    },
+    {
+      "timestamp": "2025-06-03T16:59:20.353289",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0005037784576416016
+    },
+    {
+      "timestamp": "2025-06-03T16:59:20.900802",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.002582073211669922
+    },
+    {
+      "timestamp": "2025-06-03T16:59:21.804968",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0009980201721191406
+    },
+    {
+      "timestamp": "2025-06-03T16:59:22.168448",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0014874935150146484
+    },
+    {
+      "timestamp": "2025-06-03T16:59:22.962739",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0025107860565185547
+    },
+    {
+      "timestamp": "2025-06-03T16:59:23.423392",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0020067691802978516
+    },
+    {
+      "timestamp": "2025-06-03T16:59:24.216084",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002997875213623047
+    },
+    {
+      "timestamp": "2025-06-03T16:59:26.269687",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.004500150680541992
+    },
+    {
+      "timestamp": "2025-06-03T16:59:27.124825",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.004522562026977539
+    },
+    {
+      "timestamp": "2025-06-03T16:59:27.420408",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.003011465072631836
+    },
+    {
+      "timestamp": "2025-06-03T16:59:28.171138",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:28.437252",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002012968063354492
+    },
+    {
+      "timestamp": "2025-06-03T16:59:28.822526",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0025055408477783203
+    },
+    {
+      "timestamp": "2025-06-03T16:59:29.597376",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.004500150680541992
+    },
+    {
+      "timestamp": "2025-06-03T16:59:29.854730",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:30.214147",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020182132720947266
+    },
+    {
+      "timestamp": "2025-06-03T16:59:30.907362",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0015113353729248047
+    },
+    {
+      "timestamp": "2025-06-03T16:59:31.172039",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.003538846969604492
+    },
+    {
+      "timestamp": "2025-06-03T16:59:31.517091",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0025110244750976562
+    },
+    {
+      "timestamp": "2025-06-03T16:59:40.425725",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0040242671966552734
+    },
+    {
+      "timestamp": "2025-06-03T16:59:41.168578",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0029976367950439453
+    },
+    {
+      "timestamp": "2025-06-03T16:59:41.415785",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.003998756408691406
+    },
+    {
+      "timestamp": "2025-06-03T16:59:41.810936",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.002009153366088867
+    },
+    {
+      "timestamp": "2025-06-03T16:59:42.558632",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0015134811401367188
+    },
+    {
+      "timestamp": "2025-06-03T16:59:42.821719",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.0020046234130859375
+    },
+    {
+      "timestamp": "2025-06-03T16:59:43.218516",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.001519918441772461
+    },
+    {
+      "timestamp": "2025-06-03T16:59:43.961461",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:44.353557",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.005520820617675781
+    },
+    {
+      "timestamp": "2025-06-03T16:59:45.082888",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0035278797149658203
+    },
+    {
+      "timestamp": "2025-06-03T16:59:45.455087",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002026081085205078
+    },
+    {
+      "timestamp": "2025-06-03T16:59:46.148949",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0035309791564941406
+    },
+    {
+      "timestamp": "2025-06-03T16:59:46.416071",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.005692958831787109
+    },
+    {
+      "timestamp": "2025-06-03T16:59:46.711235",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0015223026275634766
+    },
+    {
+      "timestamp": "2025-06-03T16:59:47.416408",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0030219554901123047
+    },
+    {
+      "timestamp": "2025-06-03T16:59:47.714578",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.0025146007537841797
+    },
+    {
+      "timestamp": "2025-06-03T16:59:48.387035",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.002516508102416992
+    },
+    {
+      "timestamp": "2025-06-03T16:59:48.652330",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.005044460296630859
+    },
+    {
+      "timestamp": "2025-06-03T16:59:48.854569",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0030167102813720703
+    },
+    {
+      "timestamp": "2025-06-03T16:59:49.085797",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020215511322021484
+    },
+    {
+      "timestamp": "2025-06-03T16:59:49.533657",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.001500844955444336
+    },
+    {
+      "timestamp": "2025-06-03T16:59:50.370101",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T16:59:50.705476",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020003318786621094
+    },
+    {
+      "timestamp": "2025-06-03T16:59:51.543823",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0005021095275878906
+    },
+    {
+      "timestamp": "2025-06-03T16:59:51.904269",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.00201416015625
+    },
+    {
+      "timestamp": "2025-06-03T16:59:52.722991",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0030324459075927734
+    },
+    {
+      "timestamp": "2025-06-03T16:59:53.021280",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002016305923461914
+    },
+    {
+      "timestamp": "2025-06-03T17:06:14.964930",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 2.412752389907837
+    },
+    {
+      "timestamp": "2025-06-03T17:06:17.427896",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.13495755195617676
+    },
+    {
+      "timestamp": "2025-06-03T17:06:19.563270",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.11941981315612793
+    },
+    {
+      "timestamp": "2025-06-03T17:06:22.264609",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.3825187683105469
+    },
+    {
+      "timestamp": "2025-06-03T17:06:24.756436",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.47770142555236816
+    },
+    {
+      "timestamp": "2025-06-03T17:06:27.440836",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.3655579090118408
+    },
+    {
+      "timestamp": "2025-06-03T17:06:29.855808",
+      "player": "gemma3:latest",
+      "winner": "tie",
+      "duration": 0.39642810821533203
+    },
+    {
+      "timestamp": "2025-06-03T17:06:32.447960",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.2716825008392334
+    },
+    {
+      "timestamp": "2025-06-03T17:06:34.986327",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.5229973793029785
+    },
+    {
+      "timestamp": "2025-06-03T17:06:37.921680",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.6003322601318359
+    },
+    {
+      "timestamp": "2025-06-03T17:06:40.181214",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.23814964294433594
+    },
+    {
+      "timestamp": "2025-06-03T17:06:42.985979",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.47951745986938477
+    },
+    {
+      "timestamp": "2025-06-03T17:06:45.253891",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.2486402988433838
+    },
+    {
+      "timestamp": "2025-06-03T17:06:47.876374",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.2905406951904297
+    },
+    {
+      "timestamp": "2025-06-03T17:06:50.160478",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.27171945571899414
+    },
+    {
+      "timestamp": "2025-06-03T17:06:52.989786",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.5097842216491699
+    },
+    {
+      "timestamp": "2025-06-03T17:06:55.264393",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.24994373321533203
+    },
+    {
+      "timestamp": "2025-06-03T17:06:58.004934",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.4182851314544678
+    },
+    {
+      "timestamp": "2025-06-03T17:07:00.231919",
+      "player": "gemma3:latest",
+      "winner": "player",
+      "duration": 0.21046781539916992
+    },
+    {
+      "timestamp": "2025-06-03T17:07:03.015914",
+      "player": "gemma3:latest",
+      "winner": "dealer",
+      "duration": 0.46068477630615234
+    },
+    {
+      "timestamp": "2025-06-03T17:08:41.443692",
+      "player": "qwen3:latest",
+      "winner": "dealer",
+      "duration": 67.43716955184937
+    },
+    {
+      "timestamp": "2025-06-03T17:09:08.755760",
+      "player": "qwen3:latest",
+      "winner": "player",
+      "duration": 24.977498292922974
+    },
+    {
+      "timestamp": "2025-06-03T17:11:38.879844",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:39.912841",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:41.241048",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0010046958923339844
+    },
+    {
+      "timestamp": "2025-06-03T17:11:42.257245",
+      "player": "monte_carlo",
+      "winner": "tie",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:43.583697",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0005064010620117188
+    },
+    {
+      "timestamp": "2025-06-03T17:11:44.601385",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:45.931049",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:46.950569",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:48.278178",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:49.301581",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:50.630444",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0005002021789550781
+    },
+    {
+      "timestamp": "2025-06-03T17:11:51.649699",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0004987716674804688
+    },
+    {
+      "timestamp": "2025-06-03T17:11:52.975943",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:53.996491",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:55.324400",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0.0004999637603759766
+    },
+    {
+      "timestamp": "2025-06-03T17:11:56.345170",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:57.672445",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:11:58.695899",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:00.025375",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:01.045694",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:02.368358",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:03.391806",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0.0005033016204833984
+    },
+    {
+      "timestamp": "2025-06-03T17:12:04.720849",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.00049591064453125
+    },
+    {
+      "timestamp": "2025-06-03T17:12:05.742484",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:07.068650",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:08.089904",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:09.420321",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:10.436547",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0.0004999637603759766
+    },
+    {
+      "timestamp": "2025-06-03T17:12:11.763392",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:12.781224",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:14.108714",
+      "player": "monte_carlo",
+      "winner": "tie",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:15.134692",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:16.462801",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:17.483243",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:18.812151",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:19.831993",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:21.161818",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:22.178707",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:23.504081",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:24.522438",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:25.858479",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0.0005106925964355469
+    },
+    {
+      "timestamp": "2025-06-03T17:12:26.876058",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:28.199244",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:29.218573",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:30.543596",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:31.565497",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:32.893398",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:33.912426",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0.0004966259002685547
+    },
+    {
+      "timestamp": "2025-06-03T17:12:35.237689",
+      "player": "monte_carlo",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:12:36.262161",
+      "player": "monte_carlo",
+      "winner": "dealer",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:13:00.724575",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.08535981178283691
+    },
+    {
+      "timestamp": "2025-06-03T17:13:01.755222",
+      "player": "deep_q",
+      "winner": "tie",
+      "duration": 0.0035185813903808594
+    },
+    {
+      "timestamp": "2025-06-03T17:13:03.084428",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0030126571655273438
+    },
+    {
+      "timestamp": "2025-06-03T17:13:04.104824",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.00200653076171875
+    },
+    {
+      "timestamp": "2025-06-03T17:13:05.430550",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0020020008087158203
+    },
+    {
+      "timestamp": "2025-06-03T17:13:06.450439",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.001997709274291992
+    },
+    {
+      "timestamp": "2025-06-03T17:13:07.777765",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0015053749084472656
+    },
+    {
+      "timestamp": "2025-06-03T17:13:08.800651",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002498149871826172
+    },
+    {
+      "timestamp": "2025-06-03T17:13:10.125360",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002034425735473633
+    },
+    {
+      "timestamp": "2025-06-03T17:13:11.143518",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020182132720947266
+    },
+    {
+      "timestamp": "2025-06-03T17:13:12.468297",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0025343894958496094
+    },
+    {
+      "timestamp": "2025-06-03T17:13:13.486914",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020058155059814453
+    },
+    {
+      "timestamp": "2025-06-03T17:13:14.812219",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.001512289047241211
+    },
+    {
+      "timestamp": "2025-06-03T17:13:15.834508",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0015189647674560547
+    },
+    {
+      "timestamp": "2025-06-03T17:13:17.157631",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:13:18.180090",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002042055130004883
+    },
+    {
+      "timestamp": "2025-06-03T17:13:19.509724",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020248889923095703
+    },
+    {
+      "timestamp": "2025-06-03T17:13:20.528994",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0005095005035400391
+    },
+    {
+      "timestamp": "2025-06-03T17:13:21.858401",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:13:22.879708",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0
+    },
+    {
+      "timestamp": "2025-06-03T17:13:24.206475",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0025331974029541016
+    },
+    {
+      "timestamp": "2025-06-03T17:13:25.222443",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0025169849395751953
+    },
+    {
+      "timestamp": "2025-06-03T17:13:26.543574",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0015158653259277344
+    },
+    {
+      "timestamp": "2025-06-03T17:13:27.566685",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0010073184967041016
+    },
+    {
+      "timestamp": "2025-06-03T17:13:28.905464",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0020225048065185547
+    },
+    {
+      "timestamp": "2025-06-03T17:13:29.924071",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0020072460174560547
+    },
+    {
+      "timestamp": "2025-06-03T17:13:31.253504",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002011537551879883
+    },
+    {
+      "timestamp": "2025-06-03T17:13:32.272288",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0020074844360351562
+    },
+    {
+      "timestamp": "2025-06-03T17:13:33.599783",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.004002809524536133
+    },
+    {
+      "timestamp": "2025-06-03T17:13:34.619010",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002008676528930664
+    },
+    {
+      "timestamp": "2025-06-03T17:13:35.951490",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002491474151611328
+    },
+    {
+      "timestamp": "2025-06-03T17:13:36.970136",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0020017623901367188
+    },
+    {
+      "timestamp": "2025-06-03T17:13:38.311249",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0015168190002441406
+    },
+    {
+      "timestamp": "2025-06-03T17:13:39.330517",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002018451690673828
+    },
+    {
+      "timestamp": "2025-06-03T17:13:40.657335",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0030252933502197266
+    },
+    {
+      "timestamp": "2025-06-03T17:13:41.684026",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.006013631820678711
+    },
+    {
+      "timestamp": "2025-06-03T17:13:43.024020",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.0025072097778320312
+    },
+    {
+      "timestamp": "2025-06-03T17:13:44.043246",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002516031265258789
+    },
+    {
+      "timestamp": "2025-06-03T17:13:45.367157",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.0019991397857666016
+    },
+    {
+      "timestamp": "2025-06-03T17:13:46.393092",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.001994609832763672
+    },
+    {
+      "timestamp": "2025-06-03T17:13:47.719023",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.002001047134399414
+    },
+    {
+      "timestamp": "2025-06-03T17:13:48.746789",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.007559537887573242
+    },
+    {
+      "timestamp": "2025-06-03T17:13:50.082703",
+      "player": "deep_q",
+      "winner": "player",
+      "duration": 0.002017498016357422
+    },
+    {
+      "timestamp": "2025-06-03T17:13:51.106635",
+      "player": "deep_q",
+      "winner": "dealer",
+      "duration": 0.006022214889526367
     }
   ],
   "players": {
@@ -716,13 +1952,13 @@
       "ties": 1
     },
     "gemma3:latest": {
-      "wins": 17,
-      "losses": 45,
-      "ties": 5
+      "wins": 27,
+      "losses": 56,
+      "ties": 6
     },
     "qwen3:latest": {
-      "wins": 2,
-      "losses": 7,
+      "wins": 4,
+      "losses": 9,
       "ties": 2
     },
     "deepseek-r1:8b": {
@@ -731,14 +1967,14 @@
       "ties": 0
     },
     "monte_carlo": {
-      "wins": 7,
-      "losses": 9,
-      "ties": 2
+      "wins": 39,
+      "losses": 55,
+      "ties": 6
     },
     "deep_q": {
-      "wins": 0,
-      "losses": 2,
-      "ties": 0
+      "wins": 34,
+      "losses": 59,
+      "ties": 7
     }
   }
 }

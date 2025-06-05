@@ -200,3 +200,4 @@ cython_debug/
 .cursorindexingignore
 
 
+llm_blackjack/game_stats.json

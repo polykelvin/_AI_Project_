@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 import time
+import threading
 from dotenv import load_dotenv
 from game_engine import BlackjackGame
 from llm_interface import LLMInterface
@@ -28,6 +29,9 @@ conversation_history = []
 # Track LLM response times
 llm_response_times = []
 
+# Lock for thread safety
+api_lock = threading.Lock()
+
 @app.route('/')
 def index():
     """Render the main game page"""
@@ -47,8 +51,11 @@ def send_resource(path):
 def start_game():
     """Start a new game"""
     global player_type, conversation_history, llm_response_times
-    data = request.json
-    player_type = data.get('player_type', 'human')
+    
+    # Acquire lock to ensure thread safety
+    with api_lock:
+        data = request.json
+        player_type = data.get('player_type', 'human')
     
     # Reset AI conversation/state
     llm.reset_conversation()
@@ -315,13 +322,15 @@ def player_hit():
     """Player takes another card"""
     global llm_response_times
     
-    # If human player hits, add to conversation
-    if player_type == 'human':
-        conversation_history.append({
-            "role": "system",
-            "content": "Human player chose to HIT",
-            "type": "player_action"
-        })
+    # Acquire lock to ensure thread safety
+    with api_lock:
+        # If human player hits, add to conversation
+        if player_type == 'human':
+            conversation_history.append({
+                "role": "system",
+                "content": "Human player chose to HIT",
+                "type": "player_action"
+            })
     
     game.player_hit()
     
@@ -367,13 +376,16 @@ def player_stand():
     """Player stands"""
     global llm_response_times
     
-    # If human player stands, add to conversation
-    if player_type == 'human':
-        conversation_history.append({
-            "role": "system",
-            "content": "Human player chose to STAND",
-            "type": "player_action"
-        })
+    # Acquire lock to ensure thread safety
+    with api_lock:
+    
+        # If human player stands, add to conversation
+        if player_type == 'human':
+            conversation_history.append({
+                "role": "system",
+                "content": "Human player chose to STAND",
+                "type": "player_action"
+            })
     
     game.player_stand()
     
@@ -517,27 +529,31 @@ def get_models():
 @app.route('/api/set-model', methods=['POST'])
 def set_model():
     """Set the LLM model to use"""
-    data = request.json
-    model = data.get('model')
-    if model:
-        global llm
-        llm = LLMInterface(model=model)
-        return jsonify({"success": True, "model": model})
-    return jsonify({"success": False, "error": "No model specified"})
+    # Acquire lock to ensure thread safety
+    with api_lock:
+        data = request.json
+        model = data.get('model')
+        if model:
+            global llm
+            llm = LLMInterface(model=model)
+            return jsonify({"success": True, "model": model})
+        return jsonify({"success": False, "error": "No model specified"})
 
 @app.route('/api/leaderboard', methods=['GET'])
 def get_leaderboard():
     """Get the leaderboard"""
-    leaderboard = stats.get_leaderboard()
-    recent_matches = stats.get_recent_matches()
-    
-    print("Leaderboard data:", leaderboard)
-    print("Recent matches:", recent_matches)
-    
-    return jsonify({
-        "leaderboard": leaderboard,
-        "recent_matches": recent_matches
-    })
+    # Acquire lock to ensure thread safety when reading stats
+    with api_lock:
+        leaderboard = stats.get_leaderboard()
+        recent_matches = stats.get_recent_matches()
+        
+        print("Leaderboard data:", leaderboard)
+        print("Recent matches:", recent_matches)
+        
+        return jsonify({
+            "leaderboard": leaderboard,
+            "recent_matches": recent_matches
+        })
 
 if __name__ == '__main__':
     # Create templates directory if it doesn't exist

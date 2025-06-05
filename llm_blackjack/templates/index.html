@@ -17,6 +17,81 @@
             min-height: 100vh;
         }
         
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .modal-content {
+            background-color: #34495e;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: white;
+        }
+        
+        .modal-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: none;
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .progress-container {
+            margin: 15px 0;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            background-color: #2c3e50;
+            border-radius: 4px;
+            height: 20px;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
         h1 {
             text-align: center;
             color: #f1c40f;
@@ -384,9 +459,36 @@
             
             <div class="controls">
                 <button id="start-btn">New Game</button>
+                <button id="auto-run-btn">Auto Run</button>
                 <button id="hit-btn" disabled>Hit</button>
                 <button id="stand-btn" disabled>Stand</button>
                 <a href="/leaderboard" class="leaderboard-btn">Leaderboard</a>
+            </div>
+            
+            <!-- Auto Run Modal -->
+            <div id="auto-run-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3>Auto Run Games</h3>
+                    <div class="modal-form">
+                        <div class="form-group">
+                            <label for="num-games">Number of Games:</label>
+                            <input type="number" id="num-games" min="1" max="100" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="delay-between-games">Delay Between Games (seconds):</label>
+                            <input type="number" id="delay-between-games" min="1" max="10" value="2">
+                        </div>
+                        <div class="progress-container" style="display: none;">
+                            <div class="progress-label">Progress: <span id="progress-text">0/0</span></div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                        </div>
+                        <button id="start-auto-run">Start</button>
+                        <button id="stop-auto-run" style="display: none;">Stop</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -464,6 +566,36 @@
         standBtn.addEventListener('click', playerStand);
         llmModel.addEventListener('change', setLLMModel);
         playerType.addEventListener('change', updatePlayerTypeUI);
+        
+        // Auto run functionality
+        const autoRunBtn = document.getElementById('auto-run-btn');
+        const autoRunModal = document.getElementById('auto-run-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const startAutoRunBtn = document.getElementById('start-auto-run');
+        const stopAutoRunBtn = document.getElementById('stop-auto-run');
+        const progressContainer = document.querySelector('.progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        // Auto run state
+        let autoRunInProgress = false;
+        let autoRunGameCount = 0;
+        let autoRunTotalGames = 0;
+        let autoRunDelay = 2;
+        let autoRunStopRequested = false;
+        
+        // Auto run event listeners
+        autoRunBtn.addEventListener('click', showAutoRunModal);
+        closeModal.addEventListener('click', hideAutoRunModal);
+        startAutoRunBtn.addEventListener('click', startAutoRun);
+        stopAutoRunBtn.addEventListener('click', stopAutoRun);
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === autoRunModal) {
+                hideAutoRunModal();
+            }
+        });
         
         // Load available models and initialize UI
         loadModels();
@@ -940,6 +1072,168 @@
                     loadModels();
                 }
             }
+            
+            // Disable auto run for human players
+            autoRunBtn.disabled = selectedPlayerType === 'human';
+            autoRunBtn.title = selectedPlayerType === 'human' ? 
+                'Auto run is only available for AI players' : 
+                'Run multiple games automatically';
+        }
+        
+        // Auto run modal functions
+        function showAutoRunModal() {
+            autoRunModal.style.display = 'block';
+        }
+        
+        function hideAutoRunModal() {
+            if (!autoRunInProgress) {
+                autoRunModal.style.display = 'none';
+            }
+        }
+        
+        // Start auto run
+        async function startAutoRun() {
+            const numGames = parseInt(document.getElementById('num-games').value);
+            autoRunDelay = parseInt(document.getElementById('delay-between-games').value);
+            
+            if (isNaN(numGames) || numGames < 1 || numGames > 100) {
+                alert('Please enter a valid number of games (1-100)');
+                return;
+            }
+            
+            if (isNaN(autoRunDelay) || autoRunDelay < 1 || autoRunDelay > 10) {
+                alert('Please enter a valid delay (1-10 seconds)');
+                return;
+            }
+            
+            // Setup auto run state
+            autoRunInProgress = true;
+            autoRunGameCount = 0;
+            autoRunTotalGames = numGames;
+            autoRunStopRequested = false;
+            
+            // Update UI
+            startAutoRunBtn.style.display = 'none';
+            stopAutoRunBtn.style.display = 'inline-block';
+            progressContainer.style.display = 'block';
+            progressText.textContent = `0/${autoRunTotalGames}`;
+            progressBar.style.width = '0%';
+            
+            // Disable other controls
+            startBtn.disabled = true;
+            playerType.disabled = true;
+            llmModel.disabled = true;
+            
+            // Run games
+            await runGames();
+        }
+        
+        // Stop auto run
+        function stopAutoRun() {
+            autoRunStopRequested = true;
+            stopAutoRunBtn.textContent = 'Stopping...';
+            stopAutoRunBtn.disabled = true;
+        }
+        
+        // Run games sequentially
+        async function runGames() {
+            while (autoRunGameCount < autoRunTotalGames && !autoRunStopRequested) {
+                // Start a new game
+                await runSingleGame();
+                
+                // Update progress
+                autoRunGameCount++;
+                progressText.textContent = `${autoRunGameCount}/${autoRunTotalGames}`;
+                progressBar.style.width = `${(autoRunGameCount / autoRunTotalGames) * 100}%`;
+                
+                // Wait for delay between games
+                if (autoRunGameCount < autoRunTotalGames && !autoRunStopRequested) {
+                    await new Promise(resolve => setTimeout(resolve, autoRunDelay * 1000));
+                }
+            }
+            
+            // Reset auto run state
+            finishAutoRun();
+        }
+        
+        // Run a single game
+        async function runSingleGame() {
+            return new Promise(async (resolve) => {
+                try {
+                    // Start game
+                    showLoading('Starting game...');
+                    
+                    // Clear chat messages
+                    chatMessages.innerHTML = '';
+                    
+                    const playerTypeValue = playerType.value;
+                    console.log(`Auto run: Starting game ${autoRunGameCount + 1}/${autoRunTotalGames}. Player: ${playerTypeValue}`);
+                    
+                    const startTime = performance.now();
+                    const response = await fetchWithTimeout('/api/start-game', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ player_type: playerTypeValue })
+                    });
+                    
+                    const gameState = await response.json();
+                    const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+                    console.log(`Auto run: Game ${autoRunGameCount + 1} completed in ${duration}s`);
+                    
+                    updateGameState(gameState);
+                    
+                    // Game is automatically played by AI, so we just need to wait for it to complete
+                    hideLoading();
+                    resolve();
+                } catch (error) {
+                    console.error('Error in auto run:', error);
+                    
+                    // Add error message to chat
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'message system-message';
+                    errorMsg.textContent = `Error: ${error.message}`;
+                    chatMessages.appendChild(errorMsg);
+                    
+                    hideLoading();
+                    resolve(); // Continue to next game even if there's an error
+                }
+            });
+        }
+        
+        // Finish auto run
+        function finishAutoRun() {
+            autoRunInProgress = false;
+            
+            // Update UI
+            startAutoRunBtn.style.display = 'inline-block';
+            stopAutoRunBtn.style.display = 'none';
+            stopAutoRunBtn.textContent = 'Stop';
+            stopAutoRunBtn.disabled = false;
+            
+            // Re-enable controls
+            startBtn.disabled = false;
+            playerType.disabled = false;
+            updatePlayerTypeUI(); // This will handle llmModel correctly
+            
+            // Show completion message
+            if (autoRunStopRequested) {
+                progressText.textContent = `Stopped after ${autoRunGameCount}/${autoRunTotalGames} games`;
+            } else {
+                progressText.textContent = `Completed ${autoRunGameCount}/${autoRunTotalGames} games`;
+            }
+            
+            // Allow closing the modal
+            setTimeout(() => {
+                const closeButton = document.createElement('button');
+                closeButton.textContent = 'Close';
+                closeButton.style.marginLeft = '10px';
+                closeButton.addEventListener('click', hideAutoRunModal);
+                
+                // Replace the start button with close button
+                startAutoRunBtn.parentNode.replaceChild(closeButton, startAutoRunBtn);
+            }, 1000);
         }
     </script>
 </body>
