@@ -27,12 +27,26 @@
       "player2": "human",
       "winner": 0,
       "duration": 0
+    },
+    {
+      "timestamp": "2025-06-05T13:26:20.977680",
+      "player1": "human",
+      "player2": "llm",
+      "winner": 1,
+      "duration": 5.398800849914551
+    },
+    {
+      "timestamp": "2025-06-05T13:47:10.206588",
+      "player1": "human",
+      "player2": "human",
+      "winner": 2,
+      "duration": 0
     }
   ],
   "players": {
     "human": {
-      "wins": 2,
-      "losses": 1,
+      "wins": 4,
+      "losses": 2,
       "ties": 4
     },
     "gemma3:latest": {
@@ -52,7 +66,7 @@
     },
     "llm": {
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "ties": 0
     }
   }

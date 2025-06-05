@@ -111,7 +111,7 @@ You are playing Connect 4 against another player. Here's the current game state:
 
 Current board (0=empty, 1=red, 2=yellow):
 """
-        # Display board (rotated for easier visualization)
+        # Display board from top to bottom
         for row in range(6):
             row_str = "|"
             for col in range(7):
