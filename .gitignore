@@ -201,3 +201,4 @@ cython_debug/
 
 
 llm_blackjack/game_stats.json
+connect4/game_stats.json

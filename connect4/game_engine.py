@@ -133,6 +133,7 @@ Current board (0=empty, 1=red, 2=yellow):
         prompt += """Please choose a column (0-6) to drop your piece.
 
 You can use <think>...</think> tags to show your reasoning process.
+Prioritize forming a connect-four of your pieces and blocking the opponent from forming a connect-four.
 
 Respond with ONLY a single digit (0-6) representing your chosen column.
 """

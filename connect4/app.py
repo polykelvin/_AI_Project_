@@ -18,8 +18,8 @@ llm = LLMInterface(model=os.getenv("LLM_MODEL", "gemma3:latest"))
 stats = GameStats()
 
 # Track player types
-player1_type = "human"  # Options: "human", "llm"
-player2_type = "llm"    # Options: "human", "llm"
+player1_type = "human"  # Options: "human" or specific LLM model name
+player2_type = "gemma3:latest"  # Options: "human" or specific LLM model name
 
 # Store conversation history
 conversation_history = []
@@ -48,13 +48,19 @@ def send_resource(path):
 @app.route('/api/start-game', methods=['POST'])
 def start_game():
     """Start a new game"""
-    global player1_type, player2_type, conversation_history, llm_response_times
+    global player1_type, player2_type, conversation_history, llm_response_times, llm
     
     # Acquire lock to ensure thread safety
     with api_lock:
         data = request.json
         player1_type = data.get('player1_type', 'human')
-        player2_type = data.get('player2_type', 'llm')
+        player2_type = data.get('player2_type', llm.model)
+        
+        # Set the LLM model based on player selections
+        if player1_type != 'human':
+            llm = LLMInterface(model=player1_type)
+        elif player2_type != 'human':
+            llm = LLMInterface(model=player2_type)
     
     # Reset AI conversation/state
     llm.reset_conversation()
@@ -81,7 +87,7 @@ def start_game():
     })
     
     # If AI is player 1 and it's their turn, get AI decision
-    if player1_type == 'llm' and game_state['current_player'] == 1:
+    if player1_type != 'human' and game_state['current_player'] == 1:
         ai_move = get_ai_move()
         game_state = game.get_game_state()
     
@@ -139,8 +145,8 @@ def make_move():
             stats.record_match(player1_type, player2_type, game_state['winner'], duration)
         
         # If it's AI's turn now, get AI move
-        elif ((game_state['current_player'] == 1 and player1_type == 'llm') or 
-              (game_state['current_player'] == 2 and player2_type == 'llm')):
+        elif ((game_state['current_player'] == 1 and player1_type != 'human') or 
+              (game_state['current_player'] == 2 and player2_type != 'human')):
             ai_move = get_ai_move()
             game_state = game.get_game_state()
             
@@ -173,11 +179,12 @@ def get_ai_move():
     # Generate prompt for LLM
     prompt = game.get_player_llm_prompt()
     
-    # Add prompt to conversation history
+    # Add prompt to conversation history (visible in chat)
     conversation_history.append({
         "role": "system",
         "content": prompt,
-        "type": "player_prompt"
+        "type": "player_prompt",
+        # "hidden": True  # Uncomment if you want to hide the prompt from chat
     })
     
     # Get response from LLM

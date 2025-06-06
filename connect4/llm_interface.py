@@ -19,8 +19,8 @@ class LLMInterface:
         self.timeout = 90  # Timeout in seconds (90 seconds)
         self.conversation_history = []
         
-        # Track if model supports thinking
-        self.supports_thinking = "deepseek" in model.lower() or "qwen" in model.lower()
+        # All models can use thinking tags in their responses
+        self.supports_thinking = True
         
         if model not in self.supported_models:
             print(f"Warning: Model {model} not in supported models list. Using gemma3:latest instead.")
@@ -50,9 +50,13 @@ class LLMInterface:
                 "stream": False
             }
             
-            # Add thinking parameter for models that support it
+            # Add options parameter for models that support thinking
+            # The correct format is "options" at the top level with "temperature" etc.
             if self.supports_thinking:
-                request_data["options"] = {"think": True}
+                request_data["options"] = {
+                    "temperature": 0.7,
+                    "num_predict": -1  # Set to -1 for unlimited token generation
+                }
             
             # Call Ollama Chat API with timeout
             response = requests.post(
@@ -68,16 +72,26 @@ class LLMInterface:
             if response.status_code == 200:
                 response_data = response.json()
                 
+                # Log the full response from Ollama API
+                print("Full Ollama API response:")
+                print(json.dumps(response_data, indent=2))
+                
                 # Extract response content
                 response_content = response_data.get("message", {}).get("content", "")
                 
                 # Add assistant response to conversation history
                 self.conversation_history.append({"role": "assistant", "content": response_content})
                 
-                # Extract thinking process if available
+                # Extract thinking process if available (from <think> tags in response)
                 thinking = ""
-                if self.supports_thinking and "thinking" in response_data:
-                    thinking = response_data.get("thinking", "")
+                response_content_str = response_content
+                if "<think>" in response_content_str and "</think>" in response_content_str:
+                    import re
+                    think_match = re.search(r"<think>([\s\S]*?)</think>", response_content_str)
+                    if think_match:
+                        thinking = think_match.group(1).strip()
+                        # Remove thinking tags from the response content
+                        response_content = response_content_str.replace(think_match.group(0), "").strip()
                 
                 return response_content, {
                     "response": response_content,

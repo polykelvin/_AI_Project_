@@ -180,7 +180,7 @@
 
         .column {
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column;
         }
 
         .cell {
@@ -361,20 +361,16 @@
                     <label for="player1-type">Player 1 (Red):</label>
                     <select id="player1-type">
                         <option value="human">Human</option>
-                        <option value="llm">LLM</option>
+                        <option value="gemma3:latest">Gemma 3</option>
+                        <option value="qwen3:latest">Qwen 3</option>
+                        <option value="deepseek-r1:8b">DeepSeek-R1 8B</option>
                     </select>
                 </div>
                 <div class="settings-row">
                     <label for="player2-type">Player 2 (Yellow):</label>
                     <select id="player2-type">
                         <option value="human">Human</option>
-                        <option value="llm" selected>LLM</option>
-                    </select>
-                </div>
-                <div class="settings-row">
-                    <label for="llm-model">LLM Model:</label>
-                    <select id="llm-model">
-                        <option value="gemma3:latest">Gemma 3</option>
+                        <option value="gemma3:latest" selected>Gemma 3</option>
                         <option value="qwen3:latest">Qwen 3</option>
                         <option value="deepseek-r1:8b">DeepSeek-R1 8B</option>
                     </select>
@@ -451,7 +447,6 @@
         const loadingText = document.getElementById('loading-text');
         const player1Type = document.getElementById('player1-type');
         const player2Type = document.getElementById('player2-type');
-        const llmModel = document.getElementById('llm-model');
 
         // Game state
         let gameInProgress = false;
@@ -460,7 +455,6 @@
 
         // Event listeners
         startBtn.addEventListener('click', startGame);
-        llmModel.addEventListener('change', setLLMModel);
 
         // Initialize the board
         function initializeBoard() {
@@ -492,33 +486,36 @@
         // Update the board based on game state
         function updateBoard(gameState) {
             gameBoard = gameState.board;
-
-            // Clear all cells first
-            document.querySelectorAll('.cell').forEach(cell => {
-                cell.className = 'cell';
-            });
-
-            // For each column, count tokens and place them from the bottom up
-            for (let col = 0; col < 7; col++) {
-                let tokens = [];
-
-                // Collect all tokens in this column (from any row)
-                for (let row = 0; row < 6; row++) {
-                    if (gameBoard[col][row] !== 0) {
-                        tokens.push(gameBoard[col][row]);
-                    }
+            
+            // Debug output - only show the raw game board data
+            console.clear();
+            console.log("Game Board:");
+            let boardDisplay = "";
+            for (let row = 0; row < 6; row++) {
+                let rowStr = "|";
+                for (let col = 0; col < 7; col++) {
+                    if (gameBoard[col][row] === 0) rowStr += " |";
+                    else if (gameBoard[col][row] === 1) rowStr += "R|";
+                    else rowStr += "Y|";
                 }
+                boardDisplay += rowStr + "\n";
+            }
+            boardDisplay += "+-+-+-+-+-+-+-+\n";
+            boardDisplay += "|0|1|2|3|4|5|6|";
+            console.log(boardDisplay);
 
-                // Place tokens starting from the bottom row
-                for (let i = 0; i < tokens.length; i++) {
-                    const displayRow = 5 - i;  // Start from bottom (row 5)
-                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${displayRow}"]`);
-
+            // For each column, directly map the game board data to the display
+            for (let col = 0; col < 7; col++) {
+                for (let row = 0; row < 6; row++) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    
                     if (cell) {
-                        if (tokens[i] === 1) {
+                        if (gameBoard[col][row] === 1) {
                             cell.className = 'cell player1';
-                        } else if (tokens[i] === 2) {
+                        } else if (gameBoard[col][row] === 2) {
                             cell.className = 'cell player2';
+                        } else {
+                            cell.className = 'cell';
                         }
                     }
                 }
@@ -555,7 +552,14 @@
             // Log game start with selected player types
             const player1TypeValue = player1Type.value;
             const player2TypeValue = player2Type.value;
-            console.log(`Starting new game. Player 1: ${player1TypeValue}, Player 2: ${player2TypeValue}, Model: ${llmModel.value}`);
+            // No need to log game start
+            
+            // Set the LLM model based on player selections
+            if (player1TypeValue !== 'human' && player1TypeValue !== player2TypeValue) {
+                await setLLMModel(player1TypeValue);
+            } else if (player2TypeValue !== 'human') {
+                await setLLMModel(player2TypeValue);
+            }
 
             try {
                 const startTime = performance.now();
@@ -572,7 +576,7 @@
 
                 const gameState = await response.json();
                 const duration = ((performance.now() - startTime) / 1000).toFixed(2);
-                console.log(`Game started in ${duration}s. Response:`, gameState);
+                // No need to log game state response
 
                 // Initialize and update the board
                 initializeBoard();
@@ -602,7 +606,7 @@
             if (playerType !== 'human') return;
 
             showLoading('Making move...');
-            console.log(`Player ${currentPlayer} making move in column ${column}`);
+            // No need to log player moves
 
             try {
                 const startTime = performance.now();
@@ -621,7 +625,7 @@
 
                 const gameState = await response.json();
                 const duration = ((performance.now() - startTime) / 1000).toFixed(2);
-                console.log(`Move completed in ${duration}s. Response:`, gameState);
+                // No need to log move completion
 
                 updateBoard(gameState);
             } catch (error) {
@@ -638,10 +642,8 @@
             hideLoading();
         }
 
-        // Set the LLM model
-        async function setLLMModel() {
-            const model = llmModel.value;
-
+        // Set the LLM model based on player selection
+        async function setLLMModel(model) {
             try {
                 const response = await fetch('/api/set-model', {
                     method: 'POST',
@@ -674,10 +676,14 @@
             newMessages.forEach(msg => {
                 const messageElement = document.createElement('div');
 
-                // Log message to console for debugging
-                console.log('Chat message:', msg);
+                // Don't log chat messages to console
 
                 if (msg.role === 'system') {
+                    // Skip hidden messages or player_prompt messages (LLM prompts)
+                    if (msg.hidden || msg.type === 'player_prompt') {
+                        return;
+                    }
+                    
                     // Different styling based on message type
                     if (msg.type === 'game_action' || msg.type === 'player_action') {
                         messageElement.className = 'message game-action';
@@ -788,16 +794,30 @@
                 const data = await response.json();
 
                 if (data.models && data.models.length > 0) {
-                    // Clear existing options
-                    llmModel.innerHTML = '';
-
-                    // Add available models
-                    data.models.forEach(model => {
-                        const option = document.createElement('option');
-                        option.value = model;
-                        option.textContent = model;
-                        llmModel.appendChild(option);
+                    // Update player type dropdowns with available models
+                    const selects = [player1Type, player2Type];
+                    
+                    selects.forEach(select => {
+                        // Keep only the human option
+                        const humanOption = select.querySelector('option[value="human"]');
+                        select.innerHTML = '';
+                        select.appendChild(humanOption);
+                        
+                        // Add available models
+                        data.models.forEach(model => {
+                            const option = document.createElement('option');
+                            option.value = model;
+                            // Format model name for display (e.g., "gemma3:latest" -> "Gemma 3")
+                            const modelName = model.split(':')[0];
+                            option.textContent = modelName.charAt(0).toUpperCase() + modelName.slice(1);
+                            select.appendChild(option);
+                        });
                     });
+                    
+                    // Set default selection for player 2
+                    if (data.models.length > 0) {
+                        player2Type.value = data.models[0];
+                    }
                 }
             } catch (error) {
                 console.error('Error loading models:', error);

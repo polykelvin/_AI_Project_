@@ -37,6 +37,7 @@ class GameStats:
                 "gemma3:latest": {"wins": 0, "losses": 0, "ties": 0},
                 "qwen3:latest": {"wins": 0, "losses": 0, "ties": 0},
                 "deepseek-r1:8b": {"wins": 0, "losses": 0, "ties": 0}
+                # No generic "llm" group - each model has its own record
             }
         }
     
